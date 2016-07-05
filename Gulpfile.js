@@ -2,6 +2,8 @@ var gulp = require("gulp");
 var pug = require('gulp-pug');
 var sass = require('gulp-sass');
 var ts = require('gulp-typescript');
+var browserify = require('gulp-browserify');
+var intermediate = require('gulp-intermediate');
 
 var ts_path = 'src/ts/**/*.ts';
 var typings_path = 'typings/**/*.d.ts';
@@ -18,7 +20,7 @@ gulp.task("scss", function () {
 gulp.task("pug", function () {
     return gulp.src(pug_path_compile)
         .pipe(
-            pug({}).on('error', function (e) {
+            pug({pretty: '\t'}).on('error', function (e) {
                 console.log('Pug error: ' + e.message);
                 this.emit('end');
             }))
@@ -30,11 +32,23 @@ gulp.task('typescript', function () {
         .pipe(ts({
             noImplicitAny: true,
             target: 'ES5',
-            outFile: 'script.js'
+            module: 'commonjs',
         }))
-        //.pipe(concat('script.js'))
-        .pipe(gulp.dest('./build/js'));
+        .pipe(intermediate({output: '_js_tmp'}, function (tempDir, cb) {
+            gulp.src(tempDir + '/main.js')
+                .pipe(browserify({
+                    debug: true
+                }).on('error', function (e) {
+                    console.log('Pug error: ' + e.message);
+                    this.emit('end');
+                }))
+                .pipe(gulp.dest('./build/js'))
+
+                .on('end', cb);
+
+        }));
 });
+
 
 gulp.task("watch", function () {
     gulp.watch(scss_path, ['scss']);

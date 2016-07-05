@@ -1,5 +1,5 @@
 //Описание свойств ресурса
-class ResourceDescription {
+export class ResourceDescription {
     //Название ресурса
     private _name:string;
     //Сухой ресурс или нет
@@ -8,9 +8,14 @@ class ResourceDescription {
     private _ignitable:boolean;
     //Съедобный ли ресурс
     private _eatable:boolean;
-    //Был ли данный ресурс живым
-    private _natural:boolean;
 
+
+    constructor(name:string, dry:boolean, ignitable:boolean, eatable:boolean) {
+        this._name = name;
+        this._dry = dry;
+        this._ignitable = ignitable;
+        this._eatable = eatable;
+    }
 
     //Возращает название ресурса
     get name():string {
@@ -30,10 +35,5 @@ class ResourceDescription {
     //Возращает флаг съедобности
     get eatable():boolean {
         return this._eatable;
-    }
-
-    //Возращает флаг живости
-    get natural():boolean {
-        return this._natural;
     }
 }

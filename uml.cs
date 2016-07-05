@@ -43,14 +43,10 @@ class ResourceDescription <<Описание свойств ресурса>>{
   -bool eatable
     Съедобный ли ресурс 
 
-  -bool natural
-    Был ли данный ресурс живым
-
   +string getName() //Возращает название ресурса
   +bool isDry() //Возращает флаг сухости
   +bool isIgnitable() //Возращает флаг горючести
   +bool isEatable() //Возращает флаг съедобности
-  +bool isNatural() //Возращает флаг живости
 }
 
 class Resource <<Конкретный ресурс, который хранится на складе>> {

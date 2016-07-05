@@ -1,8 +1,12 @@
+import {BadFactorDescription} from "./BadFactorDescription";
+import {BadFactor} from "./BadFactor";
+
 //Средство защиты от плохого фактора
-class Protector {
+export class Protector {
+    //Название средства
+    private _name:string;
     //Массив плохих факторов, против которых данное средство будет работать
     private _goodAgainst:Array<BadFactorDescription>;
-
     //Стоимость средства
     private _cost:number;
 
@@ -20,5 +24,10 @@ class Protector {
     //Возвращает стоимость средства
     get cost():number {
         return this._cost;
+    }
+
+    //Возвращает название средства
+    get name():string {
+        return this._name;
     }
 }

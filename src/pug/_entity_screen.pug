@@ -1,0 +1,98 @@
+div.col-md-4
+    h3.text-center Ресурсы
+    div#resource-list
+    button#create-resource.btn.btn-default.center-block Добавить
+
+div.col-md-4
+    h3.text-center Плохие факторы
+    div#bad-factor-list
+    button#create-bad-factor.btn.btn-default.center-block Добавить
+div.col-md-4
+    h3.text-center Средства защиты
+    div#protector-list
+    button#create-protector.btn.btn-default.center-block Добавить
+
+
+mixin checkbox(name, title)
+    span.checkbox-inline= title
+    input.checkbox-inline.ui-widget-content.ui-corner-all(name=name, type='checkbox')
+
+mixin textbox(name, title, type)
+    label= title
+    input.text.ui-widget-content.ui-corner-all(type=type, name=name, value='')
+
+
+div#resource-form(title='Ресурс')
+    form
+        +textbox('name', 'Название ресурса', 'text')
+        +checkbox('dry','Сухой')
+        +checkbox('ignitable','Горючий')
+        +checkbox('eatable','Съедобный')
+
+        // Allow form submission with keyboard without duplicating the dialog button
+        input(type='submit', tabindex='-1', style='position:absolute; top:-1000px')
+
+
+script#resource-template(type='x-tpl-handlebars')
+    | {{#resource}}
+    div.panel.panel-default
+        div.panel-heading.clearfix
+            h5.pull-left
+                | {{name}}
+            div.btn-group.pull-right(data-idx='{{@index}}')
+                button.btn.btn-sm.btn-danger.delete-resource Удалить
+                button.btn.btn-sm.btn-success.update-resource Изменить
+        div.panel-body
+            | {{#dry}}
+            b Сухой
+            | {{/dry}}
+            | {{#ignitable}}
+            b Горючий
+            | {{/ignitable}}
+            | {{#eatable}}
+            b Съедобный
+            | {{/eatable}}
+    | {{/resource}}
+    | {{^resource}}
+    div.panel.panel-default
+        div.panel-body.text-center Ресурсов нет
+    | {{/resource}}
+
+
+
+div#bad-factor-form(title='Плохой фактор')
+    form
+        +textbox('name', 'Название фактора', 'text')
+        +textbox('damage', 'Насколько портит данный фактор качество ресурса', 'number')
+        label Ресурсы, на которые может влиять фактор
+        select(name='resources', multiple='multiple')
+
+
+
+        // Allow form submission with keyboard without duplicating the dialog button
+        input(type='submit', tabindex='-1', style='position:absolute; top:-1000px')
+
+script#bad-factor-template(type='x-tpl-handlebars')
+    | {{#bad-factor}}
+    div.panel.panel-default
+        div.panel-heading.clearfix
+            h5.pull-left
+                | {{name}}
+            div.btn-group.pull-right(data-idx='{{@index}}')
+                button.btn.btn-sm.btn-danger.delete-bad-factor Удалить
+                button.btn.btn-sm.btn-success.update-bad-factor Изменить
+        div.panel-body
+            p
+                b Урон ресурсам: {{qualityDamage}}
+            p
+                b Повреждаемые ресурсы
+                ul
+                    |{{#affectedResources}}
+                    li {{name}}
+                    |{{/affectedResources}}
+
+    | {{/bad-factor}}
+    | {{^bad-factor}}
+    div.panel.panel-default
+        div.panel-body.text-center Плохих факторов нет
+    | {{/bad-factor}}

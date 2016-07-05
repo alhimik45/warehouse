@@ -1,5 +1,7 @@
+import {Cell} from "./Cell";
+
 //Склад
-class Warehouse {
+export class Warehouse {
     //Максимальное количество мест на складе
     private _capacity:number;
     //Занятые места на складе

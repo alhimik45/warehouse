@@ -1,5 +1,8 @@
+import {BadFactorDescription} from "./BadFactorDescription";
+import {Resource} from "./Resource";
+
 //Плохой фактор
-class BadFactor {
+export class BadFactor {
     //Свойства данного фактора
     private _description:BadFactorDescription;
     //Количество очков "жизней" фактора, которое нужно уничтожить кладовщику, чтобы избавиться от ресурса

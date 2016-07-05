@@ -2,6 +2,8 @@
   "name": "Practice",
   "dependencies": {},
   "globalDependencies": {
-    "jquery": "registry:dt/jquery#1.10.0+20160701124751"
+    "handlebars": "registry:dt/handlebars#3.0.3+20160317120654",
+    "jquery": "registry:dt/jquery#1.10.0+20160701124751",
+    "jqueryui": "registry:dt/jqueryui#1.9.0+20160627030821"
   }
 }

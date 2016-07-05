@@ -1,5 +1,7 @@
+import {ResourceDescription} from "./ResourceDescription";
+
 //Конкретный ресурс, который хранится на складе
-class Resource {
+export class Resource {
     //Свойства данного ресурса
     private _description:ResourceDescription;
     //Качество ресурса. Может ухудшаться от плохих факторов

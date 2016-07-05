@@ -1,5 +1,8 @@
+import {BadFactor} from "./BadFactor";
+import {Resource} from "./Resource";
+
 //Одно место на складе
-class Cell {
+export class Cell {
     //Нечто плохое, влияющее на находящийся тут ресурс
     private _badFactor:BadFactor;
     //Ресурс, хранящийся в данном месте склада

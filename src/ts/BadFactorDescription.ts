@@ -1,5 +1,8 @@
+import {ResourceDescription} from "./ResourceDescription";
+import {Resource} from "./Resource";
+
 //Описание плохого фактора
-class BadFactorDescription {
+export class BadFactorDescription {
     //Название фактора
     private _name:string;
     //Насколько портит данный фактор качество ресурса
@@ -24,8 +27,7 @@ class BadFactorDescription {
                 //или если его свойства совпадают в теми, которые указаны в списке
             } else if (resource.dry === checkedResourceDescription.dry &&
                 resource.eatable === checkedResourceDescription.eatable &&
-                resource.ignitable === checkedResourceDescription.ignitable &&
-                resource.natural === checkedResourceDescription.natural) {
+                resource.ignitable === checkedResourceDescription.ignitable) {
                 return true;
             }
         }
@@ -40,5 +42,15 @@ class BadFactorDescription {
     // Возвращает название плохого фактора
     get name():string {
         return this._name;
+    }
+
+    //Возвращает урон наносимый ресурсам
+    get qualityDamage():number {
+        return this._qualityDamage;
+    }
+
+    //Возвращает ресурсы, на которые влияет фактор
+    get affectedResources():Array<ResourceDescription> {
+        return this._affectedResources;
     }
 }

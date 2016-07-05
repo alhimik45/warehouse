@@ -2,12 +2,33 @@ html
     head
         meta(charset='utf-8')
         title Будни кладовщика
-        link(rel="stylesheet", type="text/css",href='css/lib/bootstrap.min.css')
-        link(rel="stylesheet", type="text/css",href='css/style.css')
+        //link(rel='stylesheet', href='//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css')
+        //script(src='//code.jquery.com/jquery-1.10.2.js')
+        //script(src='//code.jquery.com/ui/1.11.4/jquery-ui.js')
+        //link(rel='stylesheet', href='/resources/demos/style.css')
+
+
+        link(rel='stylesheet', type='text/css',href='css/lib/multi-select.css')
+        link(rel='stylesheet', type='text/css',href='css/lib/bootstrap.min.css')
+        link(rel='stylesheet', type='text/css',href='css/lib/jquery-ui.structure.min.css')
+        link(rel='stylesheet', type='text/css',href='css/lib/jquery-ui.theme.min.css')
+        link(rel='stylesheet', type='text/css',href='css/lib/jquery-ui.min.css')
+        link(rel='stylesheet', type='text/css',href='css/style.css')
         script(src='js/lib/jquery-2.2.4.min.js')
+        script(src='js/lib/handlebars-v4.0.5.js')
         script(src='js/lib/bootstrap.min.js')
-        script(src='js/script.js')
+        script(src='js/lib/jquery-ui.min.js')
+        script(src='js/lib/jquery.multi-select.js')
+        script(src='js/main.js')
     body
-        div(class='text-center')
-            h1  Игра "Борьба с вредителями на складе"
-            h2  Модель будней кладовщика
+        div.text-center
+            h2  Игра "Борьба с вредителями на складе"
+            h3  Модель будней кладовщика
+        div#screen-container
+            div#start-screen.text-center.jumbotron
+                include _start_screen.pug
+            div#entity-screen
+                include _entity_screen.pug
+            div#game-screen
+                include _game_screen.pug
+
