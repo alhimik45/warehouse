@@ -35,6 +35,9 @@ export class GameManager {
         $('#start-game').click(() => {
             this.openScreen(this._entityScreen);
         });
+        $('#run-game').click(() => {
+            this.openScreen(this._gameScreen);
+        });
     };
 
     //открытие определённого экрана игры
