@@ -1,5 +1,6 @@
 import {ResourceManager} from "./ResourceManager";
 import {BadFactorManager} from "./BadFactorManager";
+import {ProtectorManager} from "./ProtectorManager";
 
 enum GameState {
     BeforeStart,
@@ -22,6 +23,8 @@ export class GameManager {
     private _resourceManager:ResourceManager;
     //объект, управляющий списком плохих факторов
     private _badFactorManager:BadFactorManager;
+    //объект, управляющий списком средств защиты
+    private _protectorManager:ProtectorManager;
 
     constructor() {
         //инициализация элементов экранов
@@ -35,7 +38,7 @@ export class GameManager {
 
         this._resourceManager = new ResourceManager;
         this._badFactorManager = new BadFactorManager(this._resourceManager.resources);
-
+        this._protectorManager = new ProtectorManager(this._badFactorManager.badFactors);
 
         $('#start-game').click(() => {
             this.openScreen(this._entityScreen);

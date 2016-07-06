@@ -59,15 +59,12 @@ script#resource-template(type='x-tpl-handlebars')
     | {{/resource}}
 
 
-
 div#bad-factor-form(title='Плохой фактор')
     form
         +textbox('name', 'Название фактора', 'text')
         +textbox('damage', 'Насколько портит данный фактор качество ресурса', 'number')
         label Ресурсы, на которые может влиять фактор
-        select(name='resources', multiple='multiple')
-
-
+        select(name='multi', multiple='multiple')
 
         // Allow form submission with keyboard without duplicating the dialog button
         input(type='submit', tabindex='-1', style='position:absolute; top:-1000px')
@@ -96,3 +93,39 @@ script#bad-factor-template(type='x-tpl-handlebars')
     div.panel.panel-default
         div.panel-body.text-center Плохих факторов нет
     | {{/bad-factor}}
+
+
+div#protector-form(title='Средство защиты')
+    form
+        +textbox('name', 'Название средства', 'text')
+        +textbox('cost', 'Стоимость', 'number')
+        label Плохие факторы, против которых данное средство работет
+        select(name='multi', multiple='multiple')
+
+        // Allow form submission with keyboard without duplicating the dialog button
+        input(type='submit', tabindex='-1', style='position:absolute; top:-1000px')
+
+script#protector-template(type='x-tpl-handlebars')
+    | {{#protector}}
+    div.panel.panel-default
+        div.panel-heading.clearfix
+            h5.pull-left
+                | {{name}}
+            div.btn-group.pull-right(data-idx='{{@index}}')
+                button.btn.btn-sm.btn-danger.delete-protector Удалить
+                button.btn.btn-sm.btn-success.update-protector Изменить
+        div.panel-body
+            p
+                b Цена: {{cost}}
+            p
+                b Побеждаемые факторы
+                ul
+                    |{{#goodAgainst}}
+                    li {{name}}
+                    |{{/goodAgainst}}
+
+    | {{/protector}}
+    | {{^protector}}
+    div.panel.panel-default
+        div.panel-body.text-center Средств нет
+    | {{/protector}}

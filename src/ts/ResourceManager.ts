@@ -22,6 +22,10 @@ export class ResourceManager extends UserValuesManager {
         return 300;
     }
 
+    protected getMultiObjects(resource: ResourceDescription): Array<any>{
+        return [];
+    }
+
     protected createEntity(formData:any):any {
         return new ResourceDescription(
             formData.name,

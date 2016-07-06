@@ -11,9 +11,10 @@ export class Protector {
     private _cost:number;
 
 
-    constructor(goodAgainst:Array<BadFactorDescription>, cost:number) {
-        this._goodAgainst = goodAgainst;
+    constructor(name:string, cost:number, goodAgainst:Array<BadFactorDescription>) {
+        this._name = name;
         this._cost = cost;
+        this._goodAgainst = goodAgainst;
     }
 
     //Проверка, может ли данное средство справиться с определённым фактором
@@ -29,5 +30,10 @@ export class Protector {
     //Возвращает название средства
     get name():string {
         return this._name;
+    }
+
+    //Возвращает плохие факторы, против которых данное средство работет
+    get goodAgainst():Array<BadFactorDescription> {
+        return this._goodAgainst;
     }
 }

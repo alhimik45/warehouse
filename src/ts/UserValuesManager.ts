@@ -12,9 +12,12 @@ export abstract class UserValuesManager {
     protected _updateIndex:number = -1;
     //список в памяти
     protected _entities:Array<any> = [];
+    //элемент мультивыбора
+    protected _multiSelect:JQuery = null;
+    //объекты для мультивыбора
+    protected _multiObjects:Array<any> = null;
 
-
-    constructor() {
+    constructor(multiObjects?:Array<any>) {
         this._modal = $(this.getFormId()).dialog({
             autoOpen: false,
             height: this.getFormHeight(),
@@ -38,6 +41,13 @@ export abstract class UserValuesManager {
         this._list = $(this.getListId());
         this.renderList();
 
+        if (multiObjects) {
+            this._multiObjects = multiObjects;
+            this._multiSelect = this._form.find('[name="multi"]');
+            this._multiSelect.multiSelect();
+            this.updateResourcesList();
+        }
+
         $(this.getCreateBtnId()).click(() => {
             this.openForm();
         });
@@ -60,6 +70,8 @@ export abstract class UserValuesManager {
     protected abstract getFormWidth():number;
 
     protected abstract getFormHeight():number;
+
+    protected abstract getMultiObjects(entity:any):Array<any>;
 
     protected getTemplateId():string {
         return `#${this.getEntityName()}-template`;
@@ -85,11 +97,48 @@ export abstract class UserValuesManager {
         return `.update-${this.getEntityName()}`;
     }
 
-    protected openForm() {
+    protected getMultiSelectedObjects(formData:any):Array<any> {
+        let multiIdicies = formData.multi;
+        let multiArray:Array<any> = [];
+        if (multiIdicies) {
+            for (let index of multiIdicies) {
+                multiArray.push(this._multiObjects[index]);
+            }
+        }
+        return multiArray;
+    }
+
+    protected updateResourcesList():void {
+        if (this._multiObjects) {
+            this._multiSelect.empty();
+            let i = 0;
+            for (let object of this._multiObjects) {
+                this._multiSelect.append(
+                    '<option value="' + i + '">' +
+                    object.name +
+                    '</option>');
+                ++i;
+            }
+            this._multiSelect.multiSelect('refresh');
+        }
+    }
+
+    protected setMultiSelect(entity:any):void{
+        let multiIdicies:Array<string> = [];
+        for (let multi of this.getMultiObjects(entity)) {
+            multiIdicies.push(this._multiObjects.indexOf(multi).toString());
+        }
+        setTimeout(()=> {
+            this._multiSelect.multiSelect('select', multiIdicies);
+        }, 0);//¯\_(ツ)_/¯
+    }
+
+    protected openForm():void {
+        this.updateResourcesList();
         this._modal.dialog('open');
     }
 
-    protected closeForm() {
+    protected closeForm():void {
         this._modal.dialog('close');
     }
 
@@ -129,7 +178,9 @@ export abstract class UserValuesManager {
     protected updateEntity(index:number):void {
         this._updateIndex = index;
         let updatingEntity = this._entities[index];
+        this.updateResourcesList();
         this.setFormValues(updatingEntity);
+        this.setMultiSelect(updatingEntity);
         this.openForm();
     }
 
