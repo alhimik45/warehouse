@@ -2,15 +2,7 @@ import {ResourceManager} from "./ResourceManager";
 import {BadFactorManager} from "./BadFactorManager";
 import {ProtectorManager} from "./ProtectorManager";
 
-enum GameState {
-    BeforeStart,
-    CreatingEntities,
-    Playing
-}
-
 export class GameManager {
-    //TODO
-    private _gameState = GameState.BeforeStart;
     //элемент, содержащий начальный экран игры
     private _startScreen:JQuery;
     //элемент, содержащий экран игры с созданием плохих факторов, средств защиты и ресурсов

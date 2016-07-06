@@ -123,7 +123,7 @@ export abstract class UserValuesManager {
         }
     }
 
-    protected setMultiSelect(entity:any):void{
+    protected setMultiSelect(entity:any):void {
         let multiIdicies:Array<string> = [];
         for (let multi of this.getMultiObjects(entity)) {
             multiIdicies.push(this._multiObjects.indexOf(multi).toString());
@@ -136,6 +136,9 @@ export abstract class UserValuesManager {
     protected openForm():void {
         this.updateResourcesList();
         this._modal.dialog('open');
+        this._modal.dialog('option', 'position',
+            {my: "top top", at: "top top", of: window}
+        );
     }
 
     protected closeForm():void {

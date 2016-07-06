@@ -6,8 +6,6 @@ export class Resource {
     private _description:ResourceDescription;
     //Качество ресурса. Может ухудшаться от плохих факторов
     private _quality:number;
-    //Деньги, которые получит кладовщик за хранение ресурса
-    private _rent:number;
     //Оставшееся время хранения ресурса
     private _storeDays:number;
 
@@ -20,11 +18,6 @@ export class Resource {
     //Возвращает качество ресурса
     get quality():number {
         return this._quality;
-    }
-
-    //Возвращает количество денег за аренду
-    get rent():number {
-        return this._rent;
     }
 
     //Возвращает оставшееся время хранения ресурса

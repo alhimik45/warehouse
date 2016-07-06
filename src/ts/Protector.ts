@@ -9,11 +9,14 @@ export class Protector {
     private _goodAgainst:Array<BadFactorDescription>;
     //Стоимость средства
     private _cost:number;
+    //Урон, который средство наносит плохому фактору
+    private _damage:number;
 
 
-    constructor(name:string, cost:number, goodAgainst:Array<BadFactorDescription>) {
+    constructor(name:string, cost:number, damage:number, goodAgainst:Array<BadFactorDescription>) {
         this._name = name;
         this._cost = cost;
+        this._damage = damage;
         this._goodAgainst = goodAgainst;
     }
 
@@ -25,6 +28,11 @@ export class Protector {
     //Возвращает стоимость средства
     get cost():number {
         return this._cost;
+    }
+
+    //Возвращает стоимость средства
+    get damage():number {
+        return this._damage;
     }
 
     //Возвращает название средства

@@ -25,9 +25,8 @@ mixin textbox(name, title, type)
 div#resource-form(title='Ресурс')
     form
         +textbox('name', 'Название ресурса', 'text')
-        +checkbox('dry','Сухой')
-        +checkbox('ignitable','Горючий')
-        +checkbox('eatable','Съедобный')
+        +textbox('quality', 'Изначальное качество ресурса', 'number')
+        +textbox('rent', 'Деньги за один день хранения ресурса', 'number')
 
         // Allow form submission with keyboard without duplicating the dialog button
         input(type='submit', tabindex='-1', style='position:absolute; top:-1000px')
@@ -43,15 +42,10 @@ script#resource-template(type='x-tpl-handlebars')
                 button.btn.btn-sm.btn-danger.delete-resource Удалить
                 button.btn.btn-sm.btn-success.update-resource Изменить
         div.panel-body
-            | {{#dry}}
-            b Сухой
-            | {{/dry}}
-            | {{#ignitable}}
-            b Горючий
-            | {{/ignitable}}
-            | {{#eatable}}
-            b Съедобный
-            | {{/eatable}}
+            p
+                b Изначальное качество ресурса: {{quality}}
+            p
+                b Деньги за один день хранения ресурса: {{rent}}
     | {{/resource}}
     | {{^resource}}
     div.panel.panel-default
@@ -63,6 +57,7 @@ div#bad-factor-form(title='Плохой фактор')
     form
         +textbox('name', 'Название фактора', 'text')
         +textbox('damage', 'Насколько портит данный фактор качество ресурса', 'number')
+        +textbox('hitpoints', 'Количество очков "жизней" фактора', 'number')
         label Ресурсы, на которые может влиять фактор
         select(name='multi', multiple='multiple')
 
@@ -79,6 +74,8 @@ script#bad-factor-template(type='x-tpl-handlebars')
                 button.btn.btn-sm.btn-danger.delete-bad-factor Удалить
                 button.btn.btn-sm.btn-success.update-bad-factor Изменить
         div.panel-body
+            p
+                b Очки жизней: {{hitPoints}}
             p
                 b Урон ресурсам: {{qualityDamage}}
             p
@@ -99,6 +96,7 @@ div#protector-form(title='Средство защиты')
     form
         +textbox('name', 'Название средства', 'text')
         +textbox('cost', 'Стоимость', 'number')
+        +textbox('damage', 'Урон плохому фактору', 'number')
         label Плохие факторы, против которых данное средство работет
         select(name='multi', multiple='multiple')
 
@@ -115,6 +113,8 @@ script#protector-template(type='x-tpl-handlebars')
                 button.btn.btn-sm.btn-danger.delete-protector Удалить
                 button.btn.btn-sm.btn-success.update-protector Изменить
         div.panel-body
+            p
+                b Урон плохому фактору: {{damage}}
             p
                 b Цена: {{cost}}
             p

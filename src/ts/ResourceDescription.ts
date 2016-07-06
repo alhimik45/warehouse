@@ -2,19 +2,16 @@
 export class ResourceDescription {
     //Название ресурса
     private _name:string;
-    //Сухой ресурс или нет
-    private _dry:boolean;
-    //Горючий ли ресурс
-    private _ignitable:boolean;
-    //Съедобный ли ресурс
-    private _eatable:boolean;
+    //Изначальное качество ресурса. Принимается за 100%
+    private _quality:number;
+    //Деньги за один день хранения ресурса
+    private _rent:number;
 
 
-    constructor(name:string, dry:boolean, ignitable:boolean, eatable:boolean) {
+    constructor(name:string, quality:number, rent:number) {
         this._name = name;
-        this._dry = dry;
-        this._ignitable = ignitable;
-        this._eatable = eatable;
+        this._quality = quality;
+        this._rent = rent;
     }
 
     //Возращает название ресурса
@@ -22,18 +19,13 @@ export class ResourceDescription {
         return this._name;
     }
 
-    //Возращает флаг сухости
-    get dry():boolean {
-        return this._dry;
+    //Возвращает качество ресурса
+    get quality():number {
+        return this._quality;
     }
 
-    //Возращает флаг горючести
-    get ignitable():boolean {
-        return this._ignitable;
-    }
-
-    //Возращает флаг съедобности
-    get eatable():boolean {
-        return this._eatable;
+    //Возвращает количество денег за аренду
+    get rent():number {
+        return this._rent;
     }
 }

@@ -9,11 +9,13 @@ export class BadFactorDescription {
     private _qualityDamage:number;
     //Ресурсы, на которые может влиять фактор
     private _affectedResources:Array<ResourceDescription>;
+    //Количество очков "жизней" фактора, которое нужно уничтожить кладовщику, чтобы избавиться от ресурса
+    private _hitPoints:number;
 
-
-    constructor(name:string, qualityDamage:number, affectedResources:Array<ResourceDescription>) {
+    constructor(name:string, qualityDamage:number, hitPoints:number, affectedResources:Array<ResourceDescription>) {
         this._name = name;
         this._qualityDamage = qualityDamage;
+        this._hitPoints = hitPoints;
         this._affectedResources = affectedResources;
     }
 
@@ -21,13 +23,8 @@ export class BadFactorDescription {
     public canAffectTo(resource:Resource):boolean {
         let checkedResourceDescription = resource.description;
         for (let resource of this._affectedResources) {
-            //на ресурс можно повлиять если он конкретно указан по имени в списке влияния
-            if (resource.name === checkedResourceDescription.name) {
-                return true;
-                //или если его свойства совпадают в теми, которые указаны в списке
-            } else if (resource.dry === checkedResourceDescription.dry &&
-                resource.eatable === checkedResourceDescription.eatable &&
-                resource.ignitable === checkedResourceDescription.ignitable) {
+            //на ресурс можно повлиять если он указан в списке влияния
+            if (resource === checkedResourceDescription) {
                 return true;
             }
         }
@@ -47,6 +44,11 @@ export class BadFactorDescription {
     //Возвращает урон наносимый ресурсам
     get qualityDamage():number {
         return this._qualityDamage;
+    }
+
+    //Возвращает количество "жизней" фактора,
+    get hitPoints():number {
+        return this._hitPoints;
     }
 
     //Возвращает ресурсы, на которые влияет фактор

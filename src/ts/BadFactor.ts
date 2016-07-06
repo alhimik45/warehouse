@@ -5,7 +5,7 @@ import {Resource} from "./Resource";
 export class BadFactor {
     //Свойства данного фактора
     private _description:BadFactorDescription;
-    //Количество очков "жизней" фактора, которое нужно уничтожить кладовщику, чтобы избавиться от ресурса
+    //Текущее количество жизней фактора
     private _hitPoints:number;
 
 
@@ -25,7 +25,7 @@ export class BadFactor {
         return this._description;
     }
 
-    //Возвращает количество "жизней" фактора, которое нужно уничтожить кладовщику, чтобы избавиться от ресурса
+    //Возвращает количество "жизней" фактора
     get hitPoints():number {
         return this._hitPoints;
     }
