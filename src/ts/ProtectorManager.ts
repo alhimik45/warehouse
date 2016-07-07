@@ -4,7 +4,7 @@ import {UserValuesManager} from "./UserValuesManager";
 import {Protector} from "./Protector";
 
 
-//Управление списком плохих факторов
+//Управление списком средств защиты
 export class ProtectorManager extends UserValuesManager {
 
     constructor(badFactors:Array<BadFactorDescription>) {

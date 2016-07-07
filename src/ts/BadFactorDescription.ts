@@ -46,7 +46,7 @@ export class BadFactorDescription {
         return this._damage;
     }
 
-    //Возвращает количество "жизней" фактора,
+    //Возвращает количество "жизней" фактора
     get hitPoints():number {
         return this._hitPoints;
     }

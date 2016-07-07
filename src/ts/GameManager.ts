@@ -4,6 +4,7 @@ import {ProtectorManager} from "./ProtectorManager";
 import {Warehouse} from "./Warehouse";
 import {Cell} from "./Cell";
 
+//Класс, отвечающий за игровой интерфейс
 export class GameManager {
     //элемент, содержащий начальный экран игры
     private _startScreen:JQuery;
