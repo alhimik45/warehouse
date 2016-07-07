@@ -1,5 +1,6 @@
 import {BadFactorDescription} from "./BadFactorDescription";
 import {BadFactor} from "./BadFactor";
+import {Cell} from "./Cell";
 
 //Средство защиты от плохого фактора
 export class Protector {
@@ -25,12 +26,22 @@ export class Protector {
         return this._goodAgainst.indexOf(badFactor.description) !== -1;
     }
 
+    //Защита от фактора
+    public protect(cell:Cell) {
+        if (this.сanProtectFrom(cell.badFactor)) {
+            cell.badFactor.hitPoints -= this._damage;
+            if (cell.badFactor.hitPoints <= 0) {
+                cell.badFactor = null;
+            }
+        }
+    }
+
     //Возвращает стоимость средства
     get cost():number {
         return this._cost;
     }
 
-    //Возвращает стоимость средства
+    //Возвращает урон плохому фактору
     get damage():number {
         return this._damage;
     }

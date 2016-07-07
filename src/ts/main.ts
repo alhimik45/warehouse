@@ -1,5 +1,5 @@
 import {GameManager} from "./GameManager";
 
 $(()=> {
-    let a = new GameManager;
+    let _ = new GameManager;
 });

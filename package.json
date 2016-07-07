@@ -1,7 +1,9 @@
 {
   "name": "Practice",
   "version": "0.0.1",
-  "dependencies": {},
+  "dependencies": {
+    "asEvented": "^0.4.3"
+  },
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-browserify": "^0.5.1",

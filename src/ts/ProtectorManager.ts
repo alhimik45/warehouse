@@ -44,7 +44,7 @@ export class ProtectorManager extends UserValuesManager {
         return 550;
     }
 
-    protected getMultiObjects(protector: Protector): Array<BadFactorDescription>{
+    protected getMultiObjects(protector:Protector):Array<BadFactorDescription> {
         return protector.goodAgainst;
     }
 

@@ -4,7 +4,7 @@ import {UserValuesManager} from "./UserValuesManager";
 //Управление списком ресурсов
 export class ResourceManager extends UserValuesManager {
 
-    constructor(){
+    constructor() {
         super();
 
         this._entities.push(new ResourceDescription('Сено', 100, 100));
@@ -33,7 +33,7 @@ export class ResourceManager extends UserValuesManager {
         return 500;
     }
 
-    protected getMultiObjects(resource: ResourceDescription): Array<any>{
+    protected getMultiObjects(resource:ResourceDescription):Array<any> {
         return [];
     }
 

@@ -6,9 +6,12 @@ export class Resource {
     private _description:ResourceDescription;
     //Качество ресурса. Может ухудшаться от плохих факторов
     private _quality:number;
-    //Оставшееся время хранения ресурса
-    private _storeDays:number;
 
+
+    constructor(description:ResourceDescription) {
+        this._description = description;
+        this._quality = description.quality;
+    }
 
     //Возвращает свойства ресурса
     get description():ResourceDescription {
@@ -18,16 +21,6 @@ export class Resource {
     //Возвращает качество ресурса
     get quality():number {
         return this._quality;
-    }
-
-    //Возвращает оставшееся время хранения ресурса
-    get storeDays():number {
-        return this._storeDays;
-    }
-
-    //Устанавливает оставшееся время хранения ресурса
-    set storeDays(value:number) {
-        this._storeDays = value;
     }
 
     //Устанавливает качество ресурса

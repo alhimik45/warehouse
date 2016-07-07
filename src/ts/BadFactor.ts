@@ -9,6 +9,11 @@ export class BadFactor {
     private _hitPoints:number;
 
 
+    constructor(description:BadFactorDescription) {
+        this._description = description;
+        this._hitPoints = description.hitPoints;
+    }
+
     //Проверка, может ли данный фактор влиять на определённый ресурс. Делегируется свойствам ресурса
     public canAffectTo(resource:Resource):boolean {
         return this._description.canAffectTo(resource);

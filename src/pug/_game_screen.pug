@@ -1,0 +1,91 @@
+div.col-md-8
+    div#top-info
+    div.clearfix
+    div#controls
+        button#next-day.btn.btn.btn-warning.center-block.col-md-6.
+            Следующий день
+        button#increase-capacity.btn.btn.btn-success.center-block.col-md-6
+            | Добавить место на складе (
+            span#cell-cost
+            | руб)
+    div.clearfix
+    p
+    div#cells.scrollable
+div.col-md-4
+    h4.text-center.
+        Игровой лог
+    div#messages.scrollable
+
+
+div#lose-window(title='Вы проиграли!')
+    | Вы не смогли грамотно справиться с вредителями и обанкротились!
+
+div#protector-window(title='Защитные средства')
+    div#protectors.scrollable-95
+
+script#messages-template(type='x-tpl-handlebars')
+    | {{#message}}
+    p {{{this}}}
+    | {{/message}}
+
+script#info-template(type='x-tpl-handlebars')
+    div.alert.alert-success.text-center.col-md-2.
+        Деньги: {{money}} руб.
+    div.alert.alert-info.text-center.col-md-3.
+        Занято мест на складе: {{busy_cells}} / {{total_cells}}
+    div.alert.alert-info.text-center.col-md-2.
+        Прошло дней: {{days}}
+    | {{#if corruptedCells.length}}
+    div.alert.alert-danger.text-center.col-md-5
+        | Повреждаемые ячейки:
+        | {{#corruptedCells}}
+        b.
+            №{{this}}{{#unless @last}}, {{/unless}}
+        | {{/corruptedCells}}
+    | {{/if}}
+
+script#cell-template(type='x-tpl-handlebars')
+    | {{#cells}}
+    div.panel.panel-default.col-md-3(class='{{#if badFactor}}bg-danger{{else}}bg-success{{/if}}')
+        div
+            |{{#if resource}}
+            div.clearfix
+                h4.pull-left
+                    | {{resource.description.name}}
+                    | ({{restStoreDays}} дн.)
+                h5.pull-right
+                    span.label.label-info №{{@index}}
+            p
+                | {{#if badFactor}}
+                | {{badFactor.description.name}}
+                p (Жизни: {{badFactor.hitPoints}} Урон: {{badFactor.description.damage}})
+                | {{else}}
+                | &nbsp;
+                p &nbsp;
+                | {{/if}}
+            p Качество: {{resource.quality}}
+            button.btn.btn-sm.btn-success(data-id='{{@index}}').use-protector.
+                Использовать средство защиты
+            |{{else}}
+            h4 &nbsp;
+            p &nbsp;
+                button.btn.btn-sm.btn-success.center-block Пустое место
+                p &nbsp;
+            p &nbsp;
+            |{{/if}}
+            p &nbsp;
+    | {{/cells}}
+    | {{^cells}}
+    div.col-md-4
+    div.alert.alert-warning.text-center.col-md-4
+        h3 На складе пусто
+    | {{/cells}}
+
+script#protectors-template(type='x-tpl-handlebars')
+    | {{#protectors}}
+    div.row.center-block
+        button.protector-select.btn.col-md-12(class="{{#if can}}btn-success{{else}}btn-danger{{/if}}", data-id='{{protector_id}}')
+            | {{protector.name}} ({{protector.cost}} руб.)
+            | урон: {{protector.damage}}
+        p &nbsp;
+    | {{/protectors}}

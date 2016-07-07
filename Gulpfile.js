@@ -6,6 +6,7 @@ var browserify = require('gulp-browserify');
 var intermediate = require('gulp-intermediate');
 
 var ts_path = 'src/ts/**/*.ts';
+var js_path = 'src/ts/**/*.js';
 var typings_path = 'typings/**/*.d.ts';
 var scss_path = 'src/scss/**/*.scss';
 var pug_path_compile = 'src/pug/**/!(_)*.pug';
@@ -28,18 +29,19 @@ gulp.task("pug", function () {
 });
 
 gulp.task('typescript', function () {
-    return gulp.src([ts_path, typings_path])
+    return gulp.src([ts_path, js_path, typings_path])
         .pipe(ts({
             noImplicitAny: true,
             target: 'ES5',
             module: 'commonjs',
+            allowJs: true
         }))
         .pipe(intermediate({output: '_js_tmp'}, function (tempDir, cb) {
             gulp.src(tempDir + '/main.js')
                 .pipe(browserify({
                     debug: true
                 }).on('error', function (e) {
-                    console.log('Pug error: ' + e.message);
+                    console.log('Browserify error: ' + e.message);
                     this.emit('end');
                 }))
                 .pipe(gulp.dest('./build/js'))

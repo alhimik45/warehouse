@@ -1,6 +1,6 @@
 //Общий класс для тех вещей которые пользователь добавляет/изменяет/удаляет
 export abstract class UserValuesManager {
-    //окно с формой для добавления/изменения ресурса
+    //окно с формой для добавления/изменения сущности
     protected _modal:JQuery;
     //сама форма
     protected _form:JQuery;
@@ -61,42 +61,55 @@ export abstract class UserValuesManager {
         });
     }
 
+    //получение имени сущности
     protected abstract getEntityName():string;
 
+    //создание сущности
     protected abstract createEntity(formData:any):any;
 
+    //установить значения формы
     protected abstract setFormValues(entity:any):void;
 
+    //ширина формы
     protected abstract getFormWidth():number;
 
+    //высота формы
     protected abstract getFormHeight():number;
 
+    //получить сущности для множественного выбора
     protected abstract getMultiObjects(entity:any):Array<any>;
 
+    //получить id шаблона сущности
     protected getTemplateId():string {
         return `#${this.getEntityName()}-template`;
     }
 
+    //получить id списка сущности
     protected getListId():string {
         return `#${this.getEntityName()}-list`;
     }
 
+    //получить id формы сущности
     protected getFormId():string {
         return `#${this.getEntityName()}-form`;
     }
 
+    //получить id кнопки создания сущности
     protected getCreateBtnId():string {
         return `#create-${this.getEntityName()}`;
     }
 
+    //получить class кнопки удаления сущности
     protected getDeleteBtnClass():string {
         return `.delete-${this.getEntityName()}`;
     }
 
+    //получить class кнопки обновления сущности
     protected getUpdateBtnClass():string {
         return `.update-${this.getEntityName()}`;
     }
 
+    //получить выбранные сущности из формы
     protected getMultiSelectedObjects(formData:any):Array<any> {
         let multiIdicies = formData.multi;
         let multiArray:Array<any> = [];
@@ -108,6 +121,7 @@ export abstract class UserValuesManager {
         return multiArray;
     }
 
+    //обновить список сущностей
     protected updateResourcesList():void {
         if (this._multiObjects) {
             this._multiSelect.empty();
@@ -123,6 +137,7 @@ export abstract class UserValuesManager {
         }
     }
 
+    //установить выбранные сущности на форме
     protected setMultiSelect(entity:any):void {
         let multiIdicies:Array<string> = [];
         for (let multi of this.getMultiObjects(entity)) {
@@ -133,6 +148,7 @@ export abstract class UserValuesManager {
         }, 0);//¯\_(ツ)_/¯
     }
 
+    //показать форму редактирования
     protected openForm():void {
         this.updateResourcesList();
         this._modal.dialog('open');
@@ -141,10 +157,12 @@ export abstract class UserValuesManager {
         );
     }
 
+    //закрыть форму редактирования
     protected closeForm():void {
         this._modal.dialog('close');
     }
 
+    //получить данные формы редактирования
     protected formData():any {
         return this._form.serializeArray().reduce((obj:any, item:any) => {
             if (obj[item.name]) {
@@ -160,6 +178,7 @@ export abstract class UserValuesManager {
         }, {});
     }
 
+    //сохранить форму редактирования в сущность
     protected saveForm():void {
         let data = this.formData();
         let entity = this.createEntity(data);
@@ -173,11 +192,13 @@ export abstract class UserValuesManager {
         this.renderList();
     }
 
+    //удалить сущность
     protected deleteEntity(index:number):void {
         this._entities.splice(index, 1);
         this.renderList();
     }
 
+    //обновить сущность
     protected updateEntity(index:number):void {
         this._updateIndex = index;
         let updatingEntity = this._entities[index];
@@ -187,6 +208,7 @@ export abstract class UserValuesManager {
         this.openForm();
     }
 
+    //отобразить список сущностей
     protected renderList() {
         let context:any = {};
         context[this.getEntityName()] = this._entities;

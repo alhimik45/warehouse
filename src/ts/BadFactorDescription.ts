@@ -6,7 +6,7 @@ export class BadFactorDescription {
     //Название фактора
     private _name:string;
     //Насколько портит данный фактор качество ресурса
-    private _qualityDamage:number;
+    private _damage:number;
     //Ресурсы, на которые может влиять фактор
     private _affectedResources:Array<ResourceDescription>;
     //Количество очков "жизней" фактора, которое нужно уничтожить кладовщику, чтобы избавиться от ресурса
@@ -14,7 +14,7 @@ export class BadFactorDescription {
 
     constructor(name:string, qualityDamage:number, hitPoints:number, affectedResources:Array<ResourceDescription>) {
         this._name = name;
-        this._qualityDamage = qualityDamage;
+        this._damage = qualityDamage;
         this._hitPoints = hitPoints;
         this._affectedResources = affectedResources;
     }
@@ -32,7 +32,7 @@ export class BadFactorDescription {
 
     //Повлиять на ресурс.
     public affect(resource:Resource):void {
-        resource.quality -= this._qualityDamage;
+        resource.quality -= this._damage;
     }
 
 
@@ -42,8 +42,8 @@ export class BadFactorDescription {
     }
 
     //Возвращает урон наносимый ресурсам
-    get qualityDamage():number {
-        return this._qualityDamage;
+    get damage():number {
+        return this._damage;
     }
 
     //Возвращает количество "жизней" фактора,

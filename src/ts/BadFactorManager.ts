@@ -3,8 +3,6 @@ import {BadFactorDescription} from "./BadFactorDescription";
 import {ResourceDescription} from "./ResourceDescription";
 import {selectIndexes} from "./util";
 
-
-
 //Управление списком плохих факторов
 export class BadFactorManager extends UserValuesManager {
 
@@ -55,7 +53,7 @@ export class BadFactorManager extends UserValuesManager {
 
     protected setFormValues(badFactor:BadFactorDescription):void {
         this._form.find('[name="name"]').val(badFactor.name);
-        this._form.find('[name="damage"]').val(badFactor.qualityDamage);
+        this._form.find('[name="damage"]').val(badFactor.damage);
         this._form.find('[name="hitpoints"]').val(badFactor.hitPoints);
     }
 
