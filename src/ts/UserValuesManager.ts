@@ -139,13 +139,15 @@ export abstract class UserValuesManager {
 
     //установить выбранные сущности на форме
     protected setMultiSelect(entity:any):void {
-        let multiIdicies:Array<string> = [];
-        for (let multi of this.getMultiObjects(entity)) {
-            multiIdicies.push(this._multiObjects.indexOf(multi).toString());
+        if (this._multiObjects) {
+            let multiIdicies:Array<string> = [];
+            for (let multi of this.getMultiObjects(entity)) {
+                multiIdicies.push(this._multiObjects.indexOf(multi).toString());
+            }
+            setTimeout(()=> {
+                this._multiSelect.multiSelect('select', multiIdicies);
+            }, 0);
         }
-        setTimeout(()=> {
-            this._multiSelect.multiSelect('select', multiIdicies);
-        }, 0);//¯\_(ツ)_/¯
     }
 
     //показать форму редактирования

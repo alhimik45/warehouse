@@ -94,8 +94,6 @@ export class GameManager {
             setTimeout(()=> {
                 $('.scrollable-no').each((i, e) => {
                     let top = Math.round($(e).offset().top);
-                    //alert(`calc(100vh - ${top})`);
-                    console.log(`calc(100vh - ${top})px`);
                     $(e).css('max-height', `calc(100vh - ${top}px)`);
                 });
             }, 100);

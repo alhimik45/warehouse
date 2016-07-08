@@ -39,9 +39,29 @@ script#info-template(type='x-tpl-handlebars')
 
 script#cell-template(type='x-tpl-handlebars')
     | {{#cells}}
-    div.panel.panel-default.col-md-3(class='{{#if badFactor}}bg-danger{{else}}bg-success{{/if}}')
+    div.panel.panel-default.col-md-3(class='' +
+    '{{#if badFactor}}' +
+        '{{#unless resource.description.image}}' +
+            'bg-danger' +
+        '{{/unless}}' +
+    '{{else}}' +
+        '{{#unless resource.description.image}}' +
+            'bg-success' +
+        '{{/unless}}' +
+    '{{/if}}',
+    style='' +
+    '{{#if badFactor}}' +
+        '{{#if resource.description.image}}' +
+            'background: linear-gradient(rgba(242, 222, 222,.5), rgba(242, 222, 222,.5)),url({{resource.description.image}}) center no-repeat;' +
+        '{{/if}}' +
+    '{{else}}' +
+        '{{#if resource.description.image}}' +
+            'background: linear-gradient(rgba(223, 240, 216,.5), rgba(223, 240, 216,.5)),url({{resource.description.image}}) center no-repeat;' +
+        '{{/if}}' +
+    '{{/if}}')
+
         div
-            |{{#if resource}}
+            | {{#if resource}}
             div.clearfix
                 h4.pull-left
                     | {{resource.description.name}}
@@ -59,13 +79,13 @@ script#cell-template(type='x-tpl-handlebars')
             p Качество: {{resource.quality}}
             button.btn.btn-sm.btn-success.center-block.use-protector(data-id='{{@index}}', class='{{#unless badFactor}}invisible{{/unless}}').
                 Средства защиты
-            |{{else}}
+            | {{else}}
             h4 &nbsp;
             div &nbsp;
                 button.btn.btn-sm.btn-success.center-block Пустое место
                 div &nbsp;
             p &nbsp;
-            |{{/if}}
+            | {{/if}}
             div &nbsp;
     | {{/cells}}
     | {{^cells}}

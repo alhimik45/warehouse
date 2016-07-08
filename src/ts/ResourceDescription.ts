@@ -6,12 +6,18 @@ export class ResourceDescription {
     private _quality:number;
     //Деньги за один день хранения ресурса
     private _rent:number;
+    //изображение
+    private _imageUrl: string = null;
 
 
-    constructor(name:string, quality:number, rent:number) {
+
+    constructor(name:string, quality:number, rent:number, image?:string) {
         this._name = name;
         this._quality = quality;
         this._rent = rent;
+        if(image){
+            this._imageUrl = image;
+        }
     }
 
     //Возращает название ресурса
@@ -27,5 +33,10 @@ export class ResourceDescription {
     //Возвращает количество денег за аренду
     get rent():number {
         return this._rent;
+    }
+
+    //Возвращает url изображения
+    get image():string {
+        return this._imageUrl;
     }
 }
