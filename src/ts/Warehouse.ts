@@ -155,6 +155,12 @@ export class Warehouse implements AsEvented {
 
     //Устанавливает максимальное количество мест на складе
     set capacity(value:number) {
+        if(this._capacity < value){
+            let diff = value - this._capacity;
+            for(let i = 0; i < diff; ++i){
+                this._cells.push(new Cell(null,0));
+            }
+        }
         this._capacity = value;
     }
 

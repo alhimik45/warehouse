@@ -91,6 +91,15 @@ export class GameManager {
         $('#run-game').click(() => {
             this.openScreen(this._gameScreen);
             this.startGame();
+            setTimeout(()=> {
+                $('.scrollable-no').each((i, e) => {
+                    let top = Math.round($(e).offset().top);
+                    //alert(`calc(100vh - ${top})`);
+                    console.log(`calc(100vh - ${top})px`);
+                    $(e).css('max-height', `calc(100vh - ${top}px)`);
+                });
+            }, 100);
+
         });
         $('#next-day').click(() => {
             this._warehouse.processDay();
@@ -106,6 +115,7 @@ export class GameManager {
                 alert('Нехватает денег');
             }
         });
+
         let self = this;
         $(document).on('click', '.use-protector', function () {
             self._cellIdx = +$(this).attr('data-id');
@@ -234,7 +244,7 @@ export class GameManager {
     //начать игру: инициальзировать нужные переменные
     private startGame() {
         this._messages = [];
-        this._money = 150;
+        this._money = 250;
         this._days = 0;
         this._warehouse = new Warehouse(this._resourceManager.resources,
             this._badFactorManager.badFactors);

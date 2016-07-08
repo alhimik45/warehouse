@@ -10,11 +10,11 @@ div.col-md-8
             | руб)
     div.clearfix
     p
-    div#cells.scrollable
+    div#cells.scrollable-no
 div.col-md-4
     h4.text-center.
         Игровой лог
-    div#messages.scrollable
+    div#messages.scrollable-no
 
 
 div#lose-window(title='Вы проиграли!')
@@ -29,20 +29,13 @@ script#messages-template(type='x-tpl-handlebars')
     | {{/message}}
 
 script#info-template(type='x-tpl-handlebars')
-    div.alert.alert-success.text-center.col-md-2.
+    div.alert.alert-success.text-center.col-md-3.
         Деньги: {{money}} руб.
-    div.alert.alert-info.text-center.col-md-3.
+    div.alert.alert-info.text-center.col-md-4.
         Занято мест на складе: {{busy_cells}} / {{total_cells}}
-    div.alert.alert-info.text-center.col-md-2.
+    div.alert.alert-info.text-center.col-md-5.
         Прошло дней: {{days}}
-    | {{#if corruptedCells.length}}
-    div.alert.alert-danger.text-center.col-md-5
-        | Повреждаемые ячейки:
-        | {{#corruptedCells}}
-        b.
-            №{{this}}{{#unless @last}}, {{/unless}}
-        | {{/corruptedCells}}
-    | {{/if}}
+
 
 script#cell-template(type='x-tpl-handlebars')
     | {{#cells}}
@@ -55,25 +48,25 @@ script#cell-template(type='x-tpl-handlebars')
                     | ({{restStoreDays}} дн.)
                 h5.pull-right
                     span.label.label-info №{{@index}}
-            p
+            div
                 | {{#if badFactor}}
                 | {{badFactor.description.name}}
-                p (Жизни: {{badFactor.hitPoints}} Урон: {{badFactor.description.damage}})
+                div (Жизни: {{badFactor.hitPoints}} Урон: {{badFactor.description.damage}})
                 | {{else}}
                 | &nbsp;
-                p &nbsp;
+                div &nbsp;
                 | {{/if}}
             p Качество: {{resource.quality}}
-            button.btn.btn-sm.btn-success(data-id='{{@index}}').use-protector.
-                Использовать средство защиты
+            button.btn.btn-sm.btn-success.center-block.use-protector(data-id='{{@index}}', class='{{#unless badFactor}}invisible{{/unless}}').
+                Средства защиты
             |{{else}}
             h4 &nbsp;
-            p &nbsp;
+            div &nbsp;
                 button.btn.btn-sm.btn-success.center-block Пустое место
-                p &nbsp;
+                div &nbsp;
             p &nbsp;
             |{{/if}}
-            p &nbsp;
+            div &nbsp;
     | {{/cells}}
     | {{^cells}}
     div.col-md-4

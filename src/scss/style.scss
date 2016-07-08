@@ -63,6 +63,12 @@ div#users-contain table td, div#users-contain table th {
   word-wrap: break-word;
 }
 
+.scrollable-no {
+  overflow-y: auto;
+  overflow-x: hidden;
+  word-wrap: break-word;
+}
+
 .bg-danger {
   background-color: #f2dede !important;
 }
