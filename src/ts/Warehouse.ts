@@ -104,7 +104,7 @@ export class Warehouse implements AsEvented {
             //вероятность нового заказа
             if (Math.random() < 0.15) {
                 let randomResource = this._resources[Math.floor(Math.random() * this._resources.length)];
-                let storeDays = Math.floor(Math.random() * 10) + 1;
+                let storeDays = Math.floor(Math.random() * 15) + 1;
                 let cell = new Cell(new Resource(randomResource), storeDays);
                 this._cells[this.getEmptyIndex()] = cell;
                 this.emit('new-cell', cell);
