@@ -264,11 +264,8 @@ class GameManager {
 BadFactor o-- BadFactorDescription
 
 BadFactorDescription ..> Resource
-BadFactorDescription o-- ResourceDescription
 
-BadFactorManager o-- ResourceDescription
-BadFactorManager *-- BadFactorDescription
-BadFactorManager <|-- UserValuesManager
+BadFactorManager --|> UserValuesManager
 
 Cell o-- BadFactor
 Cell o-- Resource
@@ -277,26 +274,17 @@ GameManager *-- ResourceManager
 GameManager *-- ProtectorManager
 GameManager *-- BadFactorManager
 GameManager *-- Warehouse
-GameManager ..> Cell
 
-Protector o-- BadFactorDescription
 Protector ..> BadFactor
 
-ProtectorManager <|-- UserValuesManager
-ProtectorManager *-- Protector
-ProtectorManager o-- BadFactorDescription
+ProtectorManager --|> UserValuesManager
 
 Resource o-- ResourceDescription
 
-ResourceManager *-- ResourceDescription
-ResourceManager <|-- UserValuesManager
+ResourceManager --|> UserValuesManager
 
-
-Warehouse o-- ResourceDescription
-Warehouse o-- BadFactorDescription
 Warehouse *-- Cell
 Warehouse *-- BadFactor
-Warehouse *-- Resource
 
 
 

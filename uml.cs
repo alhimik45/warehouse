@@ -258,9 +258,9 @@ class GameManager <<Класс, отвечающий за игровой инт�
 
 
 
-ResourceManager <|-- UserValuesManager
-ProtectorManager <|-- UserValuesManager
-BadFactorManager <|-- UserValuesManager
+ResourceManager --|> UserValuesManager
+ProtectorManager --|> UserValuesManager
+BadFactorManager --|> UserValuesManager
 
 GameManager *-- ResourceManager
 GameManager *-- ProtectorManager

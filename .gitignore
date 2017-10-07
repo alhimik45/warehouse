@@ -4,3 +4,6 @@ typings/
 build/js/*.js
 build/css/*.css
 build/*.html
+*.docx
+*.7z
+*.zip
