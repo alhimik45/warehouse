@@ -1,9 +1,12 @@
 import {BadFactorDescription} from "./BadFactorDescription";
 import {BadFactor} from "./BadFactor";
 import {Cell} from "./Cell";
+import {IResourceApplicator} from "./IResourceApplicator";
+import {Resource} from "./Resource";
+import {IProtector} from "./IProtector";
 
 //Средство защиты от плохого фактора
-export class Protector {
+export class Protector implements IProtector {
     //Название средства
     private _name:string;
     //Массив плохих факторов, против которых данное средство будет работать
@@ -22,13 +25,13 @@ export class Protector {
     }
 
     //Проверка, может ли данное средство справиться с определённым фактором
-    public сanProtectFrom(badFactor:BadFactor):boolean {
-        return this._goodAgainst.indexOf(badFactor.description) !== -1;
+    public canApply(cell:Cell):boolean {
+        return this._goodAgainst.indexOf(cell.badFactor.description) !== -1;
     }
 
     //Защита от фактора
-    public protect(cell:Cell) {
-        if (this.сanProtectFrom(cell.badFactor)) {
+    public apply(cell:Cell) {
+        if (this.canApply(cell)) {
             cell.badFactor.hitPoints -= this._damage;
             if (cell.badFactor.hitPoints <= 0) {
                 cell.badFactor = null;

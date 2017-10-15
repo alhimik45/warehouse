@@ -2,6 +2,8 @@ import {selectIndexes} from "./util";
 import {BadFactorDescription} from "./BadFactorDescription";
 import {UserValuesManager} from "./UserValuesManager";
 import {Protector} from "./Protector";
+import {IProtector} from "./IProtector";
+import {LimitedProtector} from "./LimitedProtector";
 
 
 //Управление списком средств защиты
@@ -16,9 +18,9 @@ export class ProtectorManager extends UserValuesManager {
         this._entities.push(new Protector('Инсектициды', 25, 45,
             selectIndexes(badFactors, [1])
         ));
-        this._entities.push(new Protector('Вода', 30, 20,
+        this._entities.push(new LimitedProtector(new Protector('Вода', 30, 20,
             selectIndexes(badFactors, [0, 2])
-        ));
+        ), 1));
         this._entities.push(new Protector('Огнетушитель', 60, 50,
             selectIndexes(badFactors, [2])
         ));
@@ -63,7 +65,7 @@ export class ProtectorManager extends UserValuesManager {
         this._form.find('[name="damage"]').val(protector.damage);
     }
 
-    get protectors():Array<Protector> {
+    get protectors():Array<IProtector> {
         return this._entities;
     }
 }

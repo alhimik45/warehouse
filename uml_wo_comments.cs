@@ -87,17 +87,38 @@ class BadFactorDescription {
   +ResourceDescription getAffectedResources()
 }
 
+interface IResourceApplicator {
+  +bool сanApply(Cell cell)
+  +void apply(Cell cell)
+}
+
+interface IProtector {
+    +int getCost
+    +int getDamage
+    +string getName
+    +BadFactorDescription[] getGoodAgainst
+}
+
 class BadFactor  {
   -BadFactorDescription description
 
   -int hitPoints
 
   +BadFactorDescription getDescription()
-  +bool canAffectTo(Resource resource)
-  +void affect(Resource resource)
+  +bool сanApply(Cell cell)
+  +void apply(Cell cell)
   +BadFactorDescription getDescription()
   +int getHitPoints()
   +void setHitPoints(int hitPoints)
+}
+
+class LimitedProtector {
+  +int getCost()
+  +int getDamage()
+  +string getName()
+  +BadFactorDescription[] getGoodAgainst()
+  +bool сanApply(Cell cell)
+  +void apply(Cell cell)
 }
 
 class Protector {
@@ -113,10 +134,9 @@ class Protector {
   +int getDamage()
   +string getName()
   +BadFactorDescription[] getGoodAgainst()
-  +bool сanProtectFrom(BadFactor badFactor)
-  +void protect(cell badFactor) 
+  +bool сanApply(Cell cell)
+  +void apply(Cell cell)
 }
-
 
 abstract class UserValuesManager {
 
@@ -275,7 +295,18 @@ GameManager *-- ProtectorManager
 GameManager *-- BadFactorManager
 GameManager *-- Warehouse
 
-Protector ..> BadFactor
+Protector ..> Cell
+BadFactor ..> Cell
+
+ProtectorManager *-- Protector
+ResourceManager *-- ResourceDescription
+BadFactorManager *-- BadFactorDescription
+
+Protector --|> IProtector
+LimitedProtector --|> IProtector
+BadFactor --|> IResourceApplicator
+
+LimitedProtector o-- Protector
 
 ProtectorManager --|> UserValuesManager
 
@@ -283,10 +314,9 @@ Resource o-- ResourceDescription
 
 ResourceManager --|> UserValuesManager
 
+IProtector --|> IResourceApplicator
+
 Warehouse *-- Cell
 Warehouse *-- BadFactor
-
-
-
 
 @enduml

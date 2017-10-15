@@ -122,7 +122,7 @@ export class GameManager {
         $(document).on('click', '.protector-select', function () {
             let protectorIdx = +$(this).attr('data-id');
             let protector = self._protectorManager.protectors[protectorIdx];
-            protector.protect(self._warehouse.cells[self._cellIdx]);
+            protector.apply(self._warehouse.cells[self._cellIdx]);
             self._money -= protector.cost;
             self.hideProtectorSelector();
         });
@@ -156,12 +156,12 @@ export class GameManager {
 
     //показать окно выбора средств защиты
     private showProtectorSelector():void {
-        let badFactor = this._warehouse.cells[this._cellIdx].badFactor;
+        let selectedCell = this._warehouse.cells[this._cellIdx];
         let tplProtectors:Array<any> = [];
-        if (badFactor) {
+        if (selectedCell.badFactor) {
             let i = 0;
             for (let protector of this._protectorManager.protectors) {
-                if (protector.сanProtectFrom(badFactor)) {
+                if (protector.canApply(selectedCell)) {
                     tplProtectors.push({
                         can: this._money >= protector.cost,
                         protector: protector,
@@ -242,7 +242,7 @@ export class GameManager {
     //начать игру: инициальзировать нужные переменные
     private startGame() {
         this._messages = [];
-        this._money = 250;
+        this._money = 6666;
         this._days = 0;
         this._warehouse = new Warehouse(this._resourceManager.resources,
             this._badFactorManager.badFactors);

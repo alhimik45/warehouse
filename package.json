@@ -2,7 +2,8 @@
   "name": "Practice",
   "version": "0.0.1",
   "dependencies": {
-    "asEvented": "^0.4.3"
+    "asEvented": "^0.4.3",
+    "typescript": "^2.5.3"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
@@ -10,6 +11,6 @@
     "gulp-intermediate": "^3.0.1",
     "gulp-pug": "^3.0.3",
     "gulp-sass": "^2.3.1",
-    "gulp-typescript": "^2.13.6"
+    "gulp-typescript": "^3.2.2"
   }
 }

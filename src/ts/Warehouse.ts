@@ -7,7 +7,7 @@ import {ResourceDescription} from "./ResourceDescription";
 import {Resource} from "./Resource";
 
 //Склад
-export class Warehouse implements AsEvented {
+export class Warehouse implements IEventEmitter {
     //Максимальное количество мест на складе
     private _capacity:number = 10;
     //Занятые места на складе
@@ -46,7 +46,7 @@ export class Warehouse implements AsEvented {
         for (let cell of this._cells) {
             if (cell.resource !== null) {
                 if (cell.badFactor) {
-                    cell.badFactor.affect(cell.resource);
+                    cell.badFactor.apply(cell);
                     this.emit('cell-resource-damaged', cell);
                     if (cell.resource.quality <= 0) {
                         cellsToRemove.push(i);
