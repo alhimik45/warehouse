@@ -3,17 +3,41 @@ button#run-game.center-block.btn.btn-default Начать игру
 p
 div.col-md-4
     h3.text-center Ресурсы
-    div#resource-list
+    center.row
+        div.btn-group.col-md-7
+            button.btn.btn-primary.btn-success#resource-sort-up По возрастанию
+            button.btn.btn-primary.btn-danger#resource-sort-down По убыванию
+        span.col-md-2 Фильтр
+        input.col-md-3#resource-filter
+    p
     button#create-resource.btn.btn-default.center-block Добавить
+    p
+    div#resource-list
 
 div.col-md-4
     h3.text-center Плохие факторы
-    div#bad-factor-list
+    center.row
+        div.btn-group.col-md-7
+            button.btn.btn-primary.btn-success#bad-factor-sort-up По возрастанию
+            button.btn.btn-primary.btn-danger#bad-factor-sort-down По убыванию
+        span.col-md-2 Фильтр
+        input.col-md-3#bad-factor-filter
+    p
     button#create-bad-factor.btn.btn-default.center-block Добавить
+    p
+    div#bad-factor-list
 div.col-md-4
     h3.text-center Средства защиты
-    div#protector-list
+    center.row
+        div.btn-group.col-md-7
+            button.btn.btn-primary.btn-success#protector-sort-up По возрастанию
+            button.btn.btn-primary.btn-danger#protector-sort-down По убыванию
+        span.col-md-2 Фильтр
+        input.col-md-3#protector-filter
+    p
     button#create-protector.btn.btn-default.center-block Добавить
+    p
+    div#protector-list
 
 
 mixin checkbox(name, title)
@@ -42,7 +66,7 @@ script#resource-template(type='x-tpl-handlebars')
         div.panel-heading.clearfix
             h5.pull-left
                 | {{name}}
-            div.btn-group.pull-right(data-idx='{{@index}}')
+            div.btn-group.pull-right(data-idx='{{idx}}')
                 button.btn.btn-sm.btn-danger.delete-resource Удалить
                 button.btn.btn-sm.btn-success.update-resource Изменить
         div.panel-body
@@ -74,7 +98,7 @@ script#bad-factor-template(type='x-tpl-handlebars')
         div.panel-heading.clearfix
             h5.pull-left
                 | {{name}}
-            div.btn-group.pull-right(data-idx='{{@index}}')
+            div.btn-group.pull-right(data-idx='{{idx}}')
                 button.btn.btn-sm.btn-danger.delete-bad-factor Удалить
                 button.btn.btn-sm.btn-success.update-bad-factor Изменить
         div.panel-body
@@ -113,7 +137,7 @@ script#protector-template(type='x-tpl-handlebars')
         div.panel-heading.clearfix
             h5.pull-left
                 | {{name}}
-            div.btn-group.pull-right(data-idx='{{@index}}')
+            div.btn-group.pull-right(data-idx='{{idx}}')
                 button.btn.btn-sm.btn-danger.delete-protector Удалить
                 button.btn.btn-sm.btn-success.update-protector Изменить
         div.panel-body

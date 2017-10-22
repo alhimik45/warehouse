@@ -39,4 +39,8 @@ export class ResourceProtectorAdapter implements IProtector {
     get goodAgainst(): Array<BadFactorDescription> {
         return [];
     }
+
+    get compareCriteria(): number {
+        return this.damage;
+    }
 }

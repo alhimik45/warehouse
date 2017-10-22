@@ -41,4 +41,8 @@ export class ProtectorLimiter implements IProtector {
     get goodAgainst(): Array<BadFactorDescription> {
         return this._originalProtector.goodAgainst;
     }
+
+    get compareCriteria(): number {
+        return this._originalProtector.compareCriteria;
+    }
 }

@@ -1,42 +1,46 @@
 //Описание свойств ресурса
-export class ResourceDescription {
+import {IComparable} from "./IComparable";
+export class ResourceDescription implements IComparable {
     //Название ресурса
-    private _name:string;
+    private _name: string;
     //Изначальное качество ресурса. Принимается за 100%
-    private _quality:number;
+    private _quality: number;
     //Деньги за один день хранения ресурса
-    private _rent:number;
+    private _rent: number;
     //изображение
     private _imageUrl: string = null;
 
-
-
-    constructor(name:string, quality:number, rent:number, image?:string) {
+    constructor(name: string, quality: number, rent: number, image?: string) {
         this._name = name;
         this._quality = quality;
         this._rent = rent;
-        if(image){
+        if (image) {
             this._imageUrl = image;
         }
     }
 
     //Возращает название ресурса
-    get name():string {
+    get name(): string {
         return this._name;
     }
 
     //Возвращает качество ресурса
-    get quality():number {
+    get quality(): number {
         return this._quality;
     }
 
     //Возвращает количество денег за аренду
-    get rent():number {
+    get rent(): number {
         return this._rent;
     }
 
     //Возвращает url изображения
-    get image():string {
+    get image(): string {
         return this._imageUrl;
+    }
+
+    //Возвращает критерий сравнения
+    get compareCriteria(): number {
+        return this.quality * this.rent;
     }
 }

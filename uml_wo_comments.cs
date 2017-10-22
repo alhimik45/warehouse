@@ -58,6 +58,7 @@ class ResourceDescription {
   +string getName()
   +int getQuality()
   +int getRent()
+  +getCompareCriteria(): number
 }
 
 class Resource  {
@@ -85,6 +86,7 @@ class BadFactorDescription {
   +int getDamage()
   +int getHitPoints()
   +ResourceDescription getAffectedResources()
+  +getCompareCriteria(): number
 }
 
 interface IResourceApplicator {
@@ -120,6 +122,7 @@ class ProtectorLimiter {
   +BadFactorDescription[] getGoodAgainst()
   +bool сanApply(Cell cell)
   +void apply(Cell cell)
+  +getCompareCriteria(): number
 }
 
 class ResourceProtectorAdapter {
@@ -130,6 +133,7 @@ class ResourceProtectorAdapter {
   +BadFactorDescription[] getGoodAgainst()
   +bool сanApply(Cell cell)
   +void apply(Cell cell)
+  +getCompareCriteria(): number
 }
 
 class Protector {
@@ -147,6 +151,38 @@ class Protector {
   +BadFactorDescription[] getGoodAgainst()
   +bool сanApply(Cell cell)
   +void apply(Cell cell)
+  +getCompareCriteria(): number
+}
+
+interface IComparable {
+    +getCompareCriteria(): number
+}
+
+abstract class AbstractIterator {
+    +current(): T
+    +moveNext(): boolean
+    +reset(): void
+}
+
+class FilterIterator {
+    +constructor(comparables: Array<T> | AbstractIterator<T>, filterExpr: string)
+    +current(): T
+    +moveNext(): boolean
+    +reset(): void
+}
+
+class SortIterator {
+    +constructor(comparables: Array<T> | AbstractIterator<T>)
+    +current(): T
+    +moveNext(): boolean
+    +reset(): void
+}
+
+class InverseIterator {
+    +constructor(comparables: Array<T> | AbstractIterator<T>)
+    +current(): T
+    +moveNext(): boolean
+    +reset(): void
 }
 
 abstract class UserValuesManager {
@@ -266,10 +302,28 @@ Protector ..> Cell
 ResourceProtectorAdapter ..> Cell
 BadFactor ..> Cell
 GameManager ..> IProtector
+UserValuesManager ..> IComparable
+
+UserValuesManager ..> SortIterator
+UserValuesManager ..> InverseIterator
+UserValuesManager ..> FilterIterator
+
+IComparable <.. SortIterator
+IComparable <.. InverseIterator
+IComparable <.. FilterIterator
 
 ProtectorManager *-- Protector
 ResourceManager *-- ResourceDescription
 BadFactorManager *-- BadFactorDescription
+
+BadFactorDescription --|> IComparable
+IProtector --|> IComparable
+ResourceDescription --|> IComparable
+
+SortIterator --|> AbstractIterator
+InverseIterator --|> AbstractIterator
+FilterIterator --|> AbstractIterator
+
 
 Protector --|> IProtector
 ResourceProtectorAdapter --|> IProtector
