@@ -112,7 +112,7 @@ class BadFactor  {
   +void setHitPoints(int hitPoints)
 }
 
-class LimitedProtector {
+class ProtectorLimiter {
   +int getCost()
   +int getDamage()
   +string getName()
@@ -139,21 +139,13 @@ class Protector {
 }
 
 abstract class UserValuesManager {
-
     #_modal:JQuery
-        
     #_form:JQuery
-
     #_listTemplate:HandlebarsTemplateDelegate
-
     #_list:JQuery
-
     #_updateIndex:number = -1
-
     #_entities:Array<any> = []
-
     #_multiSelect:JQuery = null
-
     #_multiObjects:Array<any> = null
 
     #getEntityName():string
@@ -211,73 +203,36 @@ class ResourceManager{
 }
 
 class GameManager {
-
     -_startScreen:JQuery;
-
     -_entityScreen:JQuery;
-
     -_gameScreen:JQuery;
-
     -_activeScreen:JQuery;
-
     -_loseModal:JQuery;
-
     -_protectorsModal:JQuery;
-
     -_resourceManager:ResourceManager;
-
     -_badFactorManager:BadFactorManager;
-
     -_protectorManager:ProtectorManager;
-
     -_warehouse:Warehouse;
-
     -_messages:Array<string>;
-
     -_money:number;
-
     -_days:number;
-
     -_messagesTemplate:HandlebarsTemplateDelegate;
-
     -_infoTemplate:HandlebarsTemplateDelegate;
-
     -_cellTemplate:HandlebarsTemplateDelegate;
-
     -_protectorTemplate:HandlebarsTemplateDelegate;
-
     -_cellIdx:number = -1;
 
     +constructor()
-
-    -openScreen(screen:JQuery):void 
-
-
-    -update():void 
-
-
-    -checkLose():void 
-
-
+    -openScreen(screen:JQuery):void
+    -update():void
+    -checkLose():void
     -showProtectorSelector():void
-
-
-    -hideProtectorSelector():void 
-
-
-    -updateInfo():void 
-
-
-    -updateCells():void 
-
-
+    -hideProtectorSelector():void
+    -updateInfo():void
+    -updateCells():void
     -message(msg:string):void
-
-
-    -attachEventHandlers():void 
-
+    -attachEventHandlers():void
     -startGame()
-
 }
 
 
@@ -303,10 +258,10 @@ ResourceManager *-- ResourceDescription
 BadFactorManager *-- BadFactorDescription
 
 Protector --|> IProtector
-LimitedProtector --|> IProtector
+ProtectorLimiter --|> IProtector
 BadFactor --|> IResourceApplicator
 
-LimitedProtector o-- Protector
+ProtectorLimiter o-- Protector
 
 ProtectorManager --|> UserValuesManager
 

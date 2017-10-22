@@ -3,7 +3,7 @@ import {BadFactorDescription} from "./BadFactorDescription";
 import {UserValuesManager} from "./UserValuesManager";
 import {Protector} from "./Protector";
 import {IProtector} from "./IProtector";
-import {LimitedProtector} from "./LimitedProtector";
+import {ProtectorLimiter} from "./ProtectorLimiter";
 
 
 //Управление списком средств защиты
@@ -18,9 +18,9 @@ export class ProtectorManager extends UserValuesManager {
         this._entities.push(new Protector('Инсектициды', 25, 45,
             selectIndexes(badFactors, [1])
         ));
-        this._entities.push(new LimitedProtector(new Protector('Вода', 30, 20,
+        this._entities.push(new ProtectorLimiter(new Protector('Вода', 30, 20,
             selectIndexes(badFactors, [0, 2])
-        ), 1));
+        ), 2));
         this._entities.push(new Protector('Огнетушитель', 60, 50,
             selectIndexes(badFactors, [2])
         ));

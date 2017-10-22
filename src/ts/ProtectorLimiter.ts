@@ -5,8 +5,8 @@ import {IResourceApplicator} from "./IResourceApplicator";
 import {Resource} from "./Resource";
 import {IProtector} from "./IProtector";
 
-//Средство защиты от плохого фактора, которое можно использовать ограниченное число раз
-export class LimitedProtector implements IProtector {
+//Декоратор, добавляющий защитному средству максимальное количество использований
+export class ProtectorLimiter implements IProtector {
     private _originalProtector: IProtector;
     private _limit: number;
 
