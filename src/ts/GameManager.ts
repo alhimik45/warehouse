@@ -3,6 +3,8 @@ import {BadFactorManager} from "./BadFactorManager";
 import {ProtectorManager} from "./ProtectorManager";
 import {Warehouse} from "./Warehouse";
 import {Cell} from "./Cell";
+import {ResourceProtectorAdapter} from "./ResourceProtectorAdapter";
+import {IProtector} from "./IProtector";
 
 //Класс, отвечающий за игровой интерфейс
 export class GameManager {
@@ -121,7 +123,7 @@ export class GameManager {
         });
         $(document).on('click', '.protector-select', function () {
             let protectorIdx = +$(this).attr('data-id');
-            let protector = self._protectorManager.protectors[protectorIdx];
+            let protector = self.allProtectors()[protectorIdx];
             protector.apply(self._warehouse.cells[self._cellIdx]);
             self._money -= protector.cost;
             self.hideProtectorSelector();
@@ -160,7 +162,7 @@ export class GameManager {
         let tplProtectors:Array<any> = [];
         if (selectedCell.badFactor) {
             let i = 0;
-            for (let protector of this._protectorManager.protectors) {
+            for (let protector of this.allProtectors()) {
                 if (protector.canApply(selectedCell)) {
                     tplProtectors.push({
                         can: this._money >= protector.cost,
@@ -177,6 +179,10 @@ export class GameManager {
         } else {
             alert('Здесь нет плохих факторов');
         }
+    }
+
+    private allProtectors():Array<IProtector>{
+        return this._protectorManager.protectors.slice().concat(this._warehouse.cells.filter(c => c.resource).map(c => new ResourceProtectorAdapter(c.resource)));
     }
 
     //закрыть окно выбора средств защиты

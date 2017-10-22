@@ -113,6 +113,17 @@ class BadFactor  {
 }
 
 class ProtectorLimiter {
+  +constructor(protector: IProtector, limit: int)
+  +int getCost()
+  +int getDamage()
+  +string getName()
+  +BadFactorDescription[] getGoodAgainst()
+  +bool сanApply(Cell cell)
+  +void apply(Cell cell)
+}
+
+class ResourceProtectorAdapter {
+  +constructor(resource: Resource)
   +int getCost()
   +int getDamage()
   +string getName()
@@ -223,6 +234,7 @@ class GameManager {
     -_cellIdx:number = -1;
 
     +constructor()
+    -allProtectors():Array<IProtector>
     -openScreen(screen:JQuery):void
     -update():void
     -checkLose():void
@@ -251,17 +263,21 @@ GameManager *-- BadFactorManager
 GameManager *-- Warehouse
 
 Protector ..> Cell
+ResourceProtectorAdapter ..> Cell
 BadFactor ..> Cell
+GameManager ..> IProtector
 
 ProtectorManager *-- Protector
 ResourceManager *-- ResourceDescription
 BadFactorManager *-- BadFactorDescription
 
 Protector --|> IProtector
+ResourceProtectorAdapter --|> IProtector
 ProtectorLimiter --|> IProtector
 BadFactor --|> IResourceApplicator
 
 ProtectorLimiter o-- Protector
+ResourceProtectorAdapter o-- Resource
 
 ProtectorManager --|> UserValuesManager
 
