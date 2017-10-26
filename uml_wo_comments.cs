@@ -95,10 +95,10 @@ interface IResourceApplicator {
 }
 
 interface IProtector {
-    +int getCost
-    +int getDamage
-    +string getName
-    +BadFactorDescription[] getGoodAgainst
+    +int getCost()
+    +int getDamage()
+    +string getName()
+    +BadFactorDescription[] getGoodAgainst()
 }
 
 class BadFactor  {
@@ -115,6 +115,7 @@ class BadFactor  {
 }
 
 class ProtectorLimiter {
+  -IProtector _originalProtector
   +constructor(protector: IProtector, limit: int)
   +int getCost()
   +int getDamage()
@@ -126,6 +127,7 @@ class ProtectorLimiter {
 }
 
 class ResourceProtectorAdapter {
+  -Resource _resource
   +constructor(resource: Resource)
   +int getCost()
   +int getDamage()
