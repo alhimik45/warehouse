@@ -190,7 +190,6 @@ class InverseIterator {
 abstract class UserValuesManager {
     #_modal:JQuery
     #_form:JQuery
-    #_listTemplate:HandlebarsTemplateDelegate
     #_list:JQuery
     #_updateIndex:number = -1
     #_entities:Array<any> = []
@@ -203,7 +202,7 @@ abstract class UserValuesManager {
     #getFormWidth():number
     #getFormHeight():number
     #getMultiObjects(entity:any):Array<any>
-    #getTemplateId():string
+    #getTemplateName():string
     #getListId():string
     #getFormId():string
     #getCreateBtnId():string
@@ -259,10 +258,6 @@ class GameManager {
     -_loseModal:JQuery;
     -_protectorsModal:JQuery;
     -_messages:Array<string>;
-    -_messagesTemplate:HandlebarsTemplateDelegate;
-    -_infoTemplate:HandlebarsTemplateDelegate;
-    -_cellTemplate:HandlebarsTemplateDelegate;
-    -_protectorTemplate:HandlebarsTemplateDelegate;
     -_cellIdx:number = -1;
     -_logic:GameLogicFacade;
 
@@ -304,6 +299,49 @@ class GameLogicFacade {
     -allProtectors(): Array<IProtector>
 }
 
+abstract class Template {
+    -_template: HandlebarsTemplateDelegate;
+    +constructor(id: string)
+    +getHtml(obj: object): string
+}
+
+class ListElementTemplate {
+}
+
+class CellTemplate {
+    +constructor()
+}
+
+class InfoTemplate {
+    +constructor()
+}
+
+class MessagesTemplate {
+    +constructor()
+}
+
+class ProtectorTemplate {
+    +constructor()
+}
+
+class TemplateFactory {
+    +getTemplate(name: string)
+}
+
+TemplateFactory *-- Template
+GameManager ..> TemplateFactory
+UserValuesManager ..> TemplateFactory
+UserValuesManager ..> ListElementTemplate
+GameManager ..> CellTemplate
+GameManager ..> InfoTemplate
+GameManager ..> MessagesTemplate
+GameManager ..> ProtectorTemplate
+
+Template <|-- ListElementTemplate
+Template <|-- CellTemplate
+Template <|-- InfoTemplate
+Template <|-- MessagesTemplate
+Template <|-- ProtectorTemplate
 
 BadFactor o-- BadFactorDescription
 

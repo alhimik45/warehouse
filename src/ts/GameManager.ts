@@ -1,5 +1,6 @@
 import {Cell} from "./Cell";
 import {GameLogicFacade} from "./GameLogicFacade";
+import {TemplateFactory} from "./TemplateFactory";
 
 //Класс, отвечающий за игровой интерфейс
 export class GameManager {
@@ -15,14 +16,6 @@ export class GameManager {
     private _loseModal: JQuery;
     //Окно со списком защитных средств
     private _protectorsModal: JQuery;
-    //шаблон сообщений
-    private _messagesTemplate: HandlebarsTemplateDelegate;
-    //шаблон игоровой информации
-    private _infoTemplate: HandlebarsTemplateDelegate;
-    //шаблон информации об одном месте склада
-    private _cellTemplate: HandlebarsTemplateDelegate;
-    //шаблон списка защитных средств
-    private _protectorTemplate: HandlebarsTemplateDelegate;
     //сообщения для пользователя
     private _messages: Array<string>;
     //место, в котором использовать защитное средство
@@ -39,11 +32,6 @@ export class GameManager {
 
         this._entityScreen.hide();
         this._gameScreen.hide();
-
-        this._messagesTemplate = Handlebars.compile($('#messages-template').html());
-        this._infoTemplate = Handlebars.compile($('#info-template').html());
-        this._cellTemplate = Handlebars.compile($('#cell-template').html());
-        this._protectorTemplate = Handlebars.compile($('#protectors-template').html());
 
         this._protectorsModal = $('#protector-window').dialog({
             autoOpen: false,
@@ -118,7 +106,7 @@ export class GameManager {
     //обновить всё визуальное состояние
     private update(): void {
         let $messages = $('#messages');
-        $messages.html(this._messagesTemplate({message: this._messages}));
+        $messages.html(TemplateFactory.getTemplate("messages").getHtml({message: this._messages}));
         $messages.scrollTop($messages[0].scrollHeight);
         $('#cell-cost').text(this._logic.getNewCellCost());
         this.updateInfo();
@@ -137,7 +125,7 @@ export class GameManager {
     private showProtectorSelector(): void {
         let tplProtectors = this._logic.getCellProtectors(this._cellIdx);
         if (tplProtectors != null) {
-            $('#protectors').html(this._protectorTemplate({
+            $('#protectors').html(TemplateFactory.getTemplate("protector").getHtml({
                 protectors: tplProtectors
             }));
             this._protectorsModal.dialog('open');
@@ -154,12 +142,12 @@ export class GameManager {
 
     //обновить информацию для пользователя
     private updateInfo(): void {
-        $('#top-info').html(this._infoTemplate(this._logic.getInfo()));
+        $('#top-info').html(TemplateFactory.getTemplate("info").getHtml(this._logic.getInfo()));
     }
 
     //обновить ячейки
     private updateCells(): void {
-        $('#cells').html(this._cellTemplate({
+        $('#cells').html(TemplateFactory.getTemplate("cell").getHtml({
             cells: this._logic.getCells()
         }));
     }

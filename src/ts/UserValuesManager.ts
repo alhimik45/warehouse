@@ -4,13 +4,13 @@ import {Helpers} from "./Helpers";
 import {AbstractIterator} from "./AbstractIterator";
 import {InverseIterator} from "./InverseIterator";
 import {FilterIterator} from "./FilterIterator";
+import {TemplateFactory} from "./TemplateFactory";
+
 export abstract class UserValuesManager {
     //окно с формой для добавления/изменения сущности
     protected _modal: JQuery;
     //сама форма
     protected _form: JQuery;
-    //шаблон элемента списка
-    protected _listTemplate: HandlebarsTemplateDelegate;
     //список на страничке
     protected _list: JQuery;
     //индекс обновляемого элемента
@@ -44,7 +44,6 @@ export abstract class UserValuesManager {
             }
         });
         this._form = this._modal.find('form');
-        this._listTemplate = Handlebars.compile($(this.getTemplateId()).html());
         this._list = $(this.getListId());
         this.renderList();
 
@@ -52,7 +51,7 @@ export abstract class UserValuesManager {
             this._multiObjects = multiObjects;
             this._multiSelect = this._form.find('[name="multi"]');
             this._multiSelect.multiSelect();
-            this.updateResourcesList();
+            this.updateMultiList();
         }
 
         $(this.getCreateBtnId()).click(() => {
@@ -109,8 +108,8 @@ export abstract class UserValuesManager {
     protected abstract getMultiObjects(entity: any): Array<any>;
 
     //получить id шаблона сущности
-    protected getTemplateId(): string {
-        return `#${this.getEntityName()}-template`;
+    protected getListTemplateName(): string {
+        return `${this.getEntityName()}-list`;
     }
 
     //получить id списка сущности
@@ -166,7 +165,7 @@ export abstract class UserValuesManager {
     }
 
     //обновить список сущностей
-    protected updateResourcesList(): void {
+    protected updateMultiList(): void {
         if (this._multiObjects) {
             this._multiSelect.empty();
             let i = 0;
@@ -196,7 +195,7 @@ export abstract class UserValuesManager {
 
     //показать форму редактирования
     protected openForm(): void {
-        this.updateResourcesList();
+        this.updateMultiList();
         this._modal.dialog('open');
         this._modal.dialog('option', 'position',
             {my: "top top", at: "top top", of: window}
@@ -248,7 +247,7 @@ export abstract class UserValuesManager {
     protected updateEntity(index: number): void {
         this._updateIndex = index;
         let updatingEntity = this._entities[index];
-        this.updateResourcesList();
+        this.updateMultiList();
         this.setFormValues(updatingEntity);
         this.setMultiSelect(updatingEntity);
         this.openForm();
@@ -259,6 +258,6 @@ export abstract class UserValuesManager {
         let context: any = {};
         this._entities.forEach((e, i) => e.idx = i);
         context[this.getEntityName()] = Helpers.enumerate(new FilterIterator(this._iteratorFactory(), $(this.getFilterId()).val()));
-        this._list.html(this._listTemplate(context));
+        this._list.html(TemplateFactory.getTemplate(this.getListTemplateName()).getHtml(context));
     }
 }
