@@ -44,8 +44,12 @@ export class GameLogicFacade {
         return GameLogicFacade._instance;
     }
 
-    public showEntities(){
+    public showEntities() {
 
+    }
+
+    public copyCell(cellIdx: number): void {
+        this._warehouse.addCell(this._warehouse.cells[cellIdx].clone())
     }
 
     public startGame(): void {

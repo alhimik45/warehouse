@@ -19,6 +19,19 @@ export class Cell {
         this._restStoreDays = storeDays;
     }
 
+    public clone(): Cell {
+        let cell = new Cell(
+            this.resource != null ? new Resource(this.resource.description) : null,
+            this.storeDays
+        );
+        cell._restStoreDays = this._restStoreDays;
+        if (this._badFactor != null) {
+            cell._badFactor = new BadFactor(this._badFactor.description);
+            cell._badFactor.hitPoints = this._badFactor.hitPoints;
+        }
+        return cell;
+    }
+
     //Возвращает плохой фактор
     get badFactor(): BadFactor {
         return this._badFactor;

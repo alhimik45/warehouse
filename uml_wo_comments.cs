@@ -13,21 +13,20 @@ class Warehouse {
 
   -BadFactorDescription[] badFactors
 
-    -cellRent(cell:Cell)
-    -cellPenalty(cell:Cell)
-    -processCells()
-    -spreadBadFactors()
-    -getEmptyIndex()
-    -processNewCells()
-
-    +processDay()
-
+  -cellRent(cell:Cell)
+  -cellPenalty(cell:Cell)
+  -processCells()
+  -spreadBadFactors()
+  -getEmptyIndex()
+  -processNewCells()
+  +processDay()
   +Cell[] getCells()
-  +int getСellCost()
-  +int getCapacity()
-  +int getBusyCells()
-  +int getCorruptedCells()
-  +void setCapacity(int capacity)
+  +getСellCost():number
+  +getCapacity():number
+  +getBusyCells():number
+  +getCorruptedCells():number
+  +setCapacity(capacity:number):void
+  +addCell(cell: Cell)
 }
 
 class Cell {
@@ -44,7 +43,8 @@ class Cell {
   +getStoreDays():number
   +getRestStoreDays():number
   +setRestStoreDays(value:number)
-  +void setBadFactor(BadFactor badFactor)
+  +setBadFactor(BadFactor badFactor):void
+  +clone():Cell
 }
 
 class ResourceDescription {
@@ -297,6 +297,7 @@ class GameLogicFacade {
     +getCellProtectors(cellIdx: number): Array<ProtectorTemplateData>
     +getInfo(): InformationTemplateData
     +getCells(): Array<Cell>
+    +copyCell():void
     -allProtectors(): Array<IProtector>
 }
 

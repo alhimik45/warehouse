@@ -91,6 +91,11 @@ export class GameManager {
             GameLogicFacade.getInstance().applyProtector(self._cellIdx, protectorIdx);
             self.hideProtectorSelector();
         });
+        $(document).on('click', '.copy-cell', function () {
+            let cellIdx = +$(this).attr('data-id');
+            GameLogicFacade.getInstance().copyCell(cellIdx);
+            self.update();
+        });
     };
 
     //открытие определённого экрана игры

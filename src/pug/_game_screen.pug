@@ -86,7 +86,8 @@ script#cell-template(type='x-tpl-handlebars')
                 div &nbsp;
             p &nbsp;
             | {{/if}}
-            div &nbsp;
+            div.btn.btn-sm.btn-info.copy-cell(data-id='{{@index}}')
+                i.glyphicon.glyphicon-copy
     | {{/cells}}
     | {{^cells}}
     div.col-md-4

@@ -112,6 +112,10 @@ export class Warehouse implements IEventEmitter {
         }
     }
 
+    public addCell(cell: Cell): void {
+        this._capacity += 1;
+        this._cells.push(cell);
+    }
 
     //Смоделировать события, прошедшие за один день
     public processDay() {
