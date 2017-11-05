@@ -1,7 +1,7 @@
 import {Template} from "./Template";
 
 export class InfoTemplate extends Template {
-    constructor(){
+    constructor() {
         super("#info-template")
     }
 }

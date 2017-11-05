@@ -259,9 +259,8 @@ class GameManager {
     -_protectorsModal:JQuery;
     -_messages:Array<string>;
     -_cellIdx:number = -1;
-    -_logic:GameLogicFacade;
 
-    +constructor(logic: GameLogicFacade)
+    +constructor()
     -openScreen(screen:JQuery):void
     -update():void
     -checkLose():void
@@ -275,6 +274,7 @@ class GameManager {
 }
 
 class GameLogicFacade {
+    -Instance: GameLogicFacade
     +onCellRent
     +onNewResource
     +onBadFactorSpread
@@ -286,7 +286,8 @@ class GameLogicFacade {
     -_money: number;
     -_days: number;
 
-    +constructor()
+    -constructor()
+    +getInstance():GameLogicFacade
     +startGame(): void
     +nextDay(): void
     +increaseWarehouseCapacity(): boolean
@@ -372,7 +373,7 @@ BadFactorManager --|> UserValuesManager
 Cell o-- BadFactor
 Cell o-- Resource
 
-GameManager o-- GameLogicFacade
+GameManager ..> GameLogicFacade
 GameLogicFacade *-- ResourceManager
 GameLogicFacade *-- ProtectorManager
 GameLogicFacade *-- BadFactorManager

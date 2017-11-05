@@ -1,7 +1,7 @@
 import {Template} from "./Template";
 
 export class MessagesTemplate extends Template {
-    constructor(){
+    constructor() {
         super("#messages-template")
     }
 }

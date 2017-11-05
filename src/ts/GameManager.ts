@@ -20,11 +20,8 @@ export class GameManager {
     private _messages: Array<string>;
     //место, в котором использовать защитное средство
     private _cellIdx: number = -1;
-    //Игровая логика
-    private _logic: GameLogicFacade;
 
-    constructor(logic: GameLogicFacade) {
-        this._logic = logic;
+    constructor() {
         this._startScreen = $('#start-screen');
         this._entityScreen = $('#entity-screen');
         this._gameScreen = $('#game-screen');
@@ -58,6 +55,7 @@ export class GameManager {
         });
 
         $('#start-game').click(() => {
+            GameLogicFacade.getInstance().showEntities();
             this.openScreen(this._entityScreen);
         });
         $('#run-game').click(() => {
@@ -72,11 +70,11 @@ export class GameManager {
 
         });
         $('#next-day').click(() => {
-            this._logic.nextDay();
+            GameLogicFacade.getInstance().nextDay();
             this.update();
         });
         $('#increase-capacity').click(() => {
-            if (this._logic.increaseWarehouseCapacity()) {
+            if (GameLogicFacade.getInstance().increaseWarehouseCapacity()) {
                 this.update();
             } else {
                 alert('Нехватает денег');
@@ -90,7 +88,7 @@ export class GameManager {
         });
         $(document).on('click', '.protector-select', function () {
             let protectorIdx = +$(this).attr('data-id');
-            self._logic.applyProtector(self._cellIdx, protectorIdx);
+            GameLogicFacade.getInstance().applyProtector(self._cellIdx, protectorIdx);
             self.hideProtectorSelector();
         });
     };
@@ -108,7 +106,7 @@ export class GameManager {
         let $messages = $('#messages');
         $messages.html(TemplateFactory.getTemplate("messages").getHtml({message: this._messages}));
         $messages.scrollTop($messages[0].scrollHeight);
-        $('#cell-cost').text(this._logic.getNewCellCost());
+        $('#cell-cost').text(GameLogicFacade.getInstance().getNewCellCost());
         this.updateInfo();
         this.updateCells();
         this.checkLose();
@@ -116,14 +114,14 @@ export class GameManager {
 
     //проверить условие проигрыша
     private checkLose(): void {
-        if (this._logic.isLose()) {
+        if (GameLogicFacade.getInstance().isLose()) {
             this._loseModal.dialog('open');
         }
     }
 
     //показать окно выбора средств защиты
     private showProtectorSelector(): void {
-        let tplProtectors = this._logic.getCellProtectors(this._cellIdx);
+        let tplProtectors = GameLogicFacade.getInstance().getCellProtectors(this._cellIdx);
         if (tplProtectors != null) {
             $('#protectors').html(TemplateFactory.getTemplate("protector").getHtml({
                 protectors: tplProtectors
@@ -142,13 +140,13 @@ export class GameManager {
 
     //обновить информацию для пользователя
     private updateInfo(): void {
-        $('#top-info').html(TemplateFactory.getTemplate("info").getHtml(this._logic.getInfo()));
+        $('#top-info').html(TemplateFactory.getTemplate("info").getHtml(GameLogicFacade.getInstance().getInfo()));
     }
 
     //обновить ячейки
     private updateCells(): void {
         $('#cells').html(TemplateFactory.getTemplate("cell").getHtml({
-            cells: this._logic.getCells()
+            cells: GameLogicFacade.getInstance().getCells()
         }));
     }
 
@@ -160,21 +158,21 @@ export class GameManager {
 
     //начать слушать события склада
     private attachEventHandlers(): void {
-        this._logic.onCellRent = (cell: Cell, rent: number) => {
+        GameLogicFacade.getInstance().onCellRent = (cell: Cell, rent: number) => {
             let cellQuality = Math.round(cell.resource.quality / cell.resource.description.quality * 100);
             this.message(`Вы получили <b>${rent}руб.</b> за хранение
             <i>${cell.resource.description.name}</i> с качеством <b>${cellQuality}%</b>`);
         };
-        this._logic.onNewResource = (cell: Cell) => {
+        GameLogicFacade.getInstance().onNewResource = (cell: Cell) => {
             this.message(`Завезли новый товар <b>${cell.resource.description.name}</b>
             на срок <b>${cell.storeDays}дн.</b>`);
         };
-        this._logic.onBadFactorSpread = (cell: Cell, i: number) => {
+        GameLogicFacade.getInstance().onBadFactorSpread = (cell: Cell, i: number) => {
             this.message(`<font color="#a52a2a">
             На месте <b>№${i}</b> появилось <b>${cell.badFactor.description.name}</b>
             </font>`);
         };
-        this._logic.onCellResourceDestroyed = (cell: Cell, penalty: number, i: number) => {
+        GameLogicFacade.getInstance().onCellResourceDestroyed = (cell: Cell, penalty: number, i: number) => {
             this.message(`<font color="#a52a2a">
             Товар на месте <b>№${i}</b> был уничтожен из-за <b>${cell.badFactor.description.name}</b>.<br/>
             Было потеряно <b>${penalty}руб.</b>
@@ -185,7 +183,7 @@ export class GameManager {
     //начать игру: инициальзировать нужные переменные
     private startGame() {
         this._messages = [];
-        this._logic.startGame();
+        GameLogicFacade.getInstance().startGame();
         this.attachEventHandlers();
         this.update();
     }

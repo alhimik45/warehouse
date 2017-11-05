@@ -9,6 +9,7 @@ import {InformationTemplateData} from "./InformationTemplateData";
 import {Cell} from "./Cell";
 
 export class GameLogicFacade {
+    private static _instance: GameLogicFacade;
     public onCellRent: (cell: Cell, rent: number) => void;
     public onNewResource: (cell: Cell) => void;
     public onBadFactorSpread: (cell: Cell, i: number) => void;
@@ -26,7 +27,7 @@ export class GameLogicFacade {
     //сколько дней работает кладовщик
     private _days: number;
 
-    constructor() {
+    private constructor() {
         this._resourceManager = new ResourceManager;
         this._badFactorManager = new BadFactorManager(this._resourceManager.resources);
         this._protectorManager = new ProtectorManager(this._badFactorManager.badFactors);
@@ -34,6 +35,17 @@ export class GameLogicFacade {
 
     private allProtectors(): Array<IProtector> {
         return this._protectorManager.protectors.slice().concat(this._warehouse.cells.filter(c => c.resource).map(c => new ResourceProtectorAdapter(c.resource)));
+    }
+
+    public static getInstance(): GameLogicFacade {
+        if (!GameLogicFacade._instance) {
+            GameLogicFacade._instance = new GameLogicFacade();
+        }
+        return GameLogicFacade._instance;
+    }
+
+    public showEntities(){
+
     }
 
     public startGame(): void {

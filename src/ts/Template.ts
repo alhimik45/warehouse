@@ -5,7 +5,7 @@ export abstract class Template {
         this._template = Handlebars.compile($(id).html());
     }
 
-    public getHtml(obj: object): string{
+    public getHtml(obj: object): string {
         return this._template(obj);
     }
 }

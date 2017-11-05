@@ -13,7 +13,7 @@ export class TemplateFactory {
         if (TemplateFactory.dict.has(name)) {
             return TemplateFactory.dict.get(name);
         }
-        let o :Template;
+        let o: Template;
         switch (name) {
             case "resource-list":
                 o = new ListElementTemplate("#resource-template");

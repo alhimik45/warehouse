@@ -1,7 +1,7 @@
 import {Template} from "./Template";
 
 export class CellTemplate extends Template {
-    constructor(){
+    constructor() {
         super("#cell-template")
     }
 }
