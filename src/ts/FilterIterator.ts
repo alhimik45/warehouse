@@ -15,7 +15,7 @@ export class FilterIterator<T extends IComparable> extends AbstractIterator<T> {
             compColl = <Array<T>>comparables;
         }
         this._comparables = compColl.slice().filter(c => {
-            if(filterExpr.replace(" ", "") == ""){
+            if (filterExpr.replace(" ", "") == "") {
                 return true;
             }
             try {

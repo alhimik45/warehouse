@@ -1,8 +1,5 @@
 import {BadFactorDescription} from "./BadFactorDescription";
-import {BadFactor} from "./BadFactor";
 import {Cell} from "./Cell";
-import {IResourceApplicator} from "./IResourceApplicator";
-import {Resource} from "./Resource";
 import {IProtector} from "./IProtector";
 
 //Декоратор, добавляющий защитному средству максимальное количество использований

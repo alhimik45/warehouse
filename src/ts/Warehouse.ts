@@ -1,24 +1,24 @@
 import {Cell} from "./Cell";
-
-import asEvented = require('./asevented.min.js');
 import {BadFactorDescription} from "./BadFactorDescription";
 import {BadFactor} from "./BadFactor";
 import {ResourceDescription} from "./ResourceDescription";
 import {Resource} from "./Resource";
 
+import asEvented = require('./asevented.min.js');
+
 //Склад
 export class Warehouse implements IEventEmitter {
     //Максимальное количество мест на складе
-    private _capacity:number = 10;
+    private _capacity: number = 10;
     //Занятые места на складе
-    private _cells:Array<Cell> = [];
+    private _cells: Array<Cell> = [];
     //Список ресурсов, которые могут прийти на склад
-    private _resources:Array<ResourceDescription>;
+    private _resources: Array<ResourceDescription>;
     //Список плохих факторов, которые могут возникнуть
-    private _badFactors:Array<BadFactorDescription>;
+    private _badFactors: Array<BadFactorDescription>;
 
 
-    constructor(resources:Array<ResourceDescription>, badFactors:Array<BadFactorDescription>) {
+    constructor(resources: Array<ResourceDescription>, badFactors: Array<BadFactorDescription>) {
         this._resources = resources;
         this._badFactors = badFactors;
         for (let i = 0; i < this._capacity; ++i) {
@@ -27,21 +27,21 @@ export class Warehouse implements IEventEmitter {
     }
 
     //Вычисляет арендную плату за хранение ресурса
-    private cellRent(cell:Cell) {
+    private cellRent(cell: Cell) {
         return Math.round(
             cell.resource.description.rent * cell.storeDays *
             cell.resource.quality / cell.resource.description.quality);
     }
 
     //Вычисляет штраф за полную порчу ресурса
-    private cellPenalty(cell:Cell) {
+    private cellPenalty(cell: Cell) {
         return Math.round(
             cell.resource.description.rent * cell.storeDays / 2);
     }
 
     //обработка существующих мест
     private processCells() {
-        let cellsToRemove:Array<number> = [];
+        let cellsToRemove: Array<number> = [];
         let i = 0;
         for (let cell of this._cells) {
             if (cell.resource !== null) {
@@ -121,29 +121,29 @@ export class Warehouse implements IEventEmitter {
     }
 
     //Возвращает массив занятых ячеек склада
-    get cells():Array<Cell> {
+    get cells(): Array<Cell> {
         return this._cells;
     }
 
     //Возвращает стоимость увеличения вместимости склада на одно место
-    get cellCost():number {
+    get cellCost(): number {
         return this._capacity * 300;
     }
 
     //Возвращает максимальное количество мест на складе
-    get capacity():number {
+    get capacity(): number {
         return this._capacity;
     }
 
     //Возвращает количество занятых мест на складе
-    get busyCells():number {
+    get busyCells(): number {
         return this._cells.filter((cell) => cell.resource != null).length;
     }
 
     //Возвращает номера занятых мест, в которых есть плохой фактор
-    get corruptedCells():Array<number> {
+    get corruptedCells(): Array<number> {
         let i = 0;
-        let corrupted:Array<number> = [];
+        let corrupted: Array<number> = [];
         for (let cell of this.cells) {
             if (cell.badFactor) {
                 corrupted.push(i);
@@ -154,20 +154,20 @@ export class Warehouse implements IEventEmitter {
     }
 
     //Устанавливает максимальное количество мест на складе
-    set capacity(value:number) {
-        if(this._capacity < value){
+    set capacity(value: number) {
+        if (this._capacity < value) {
             let diff = value - this._capacity;
-            for(let i = 0; i < diff; ++i){
-                this._cells.push(new Cell(null,0));
+            for (let i = 0; i < diff; ++i) {
+                this._cells.push(new Cell(null, 0));
             }
         }
         this._capacity = value;
     }
 
     //для asEvented
-    call:(proto:any)=>void;
-    on:(event:string, listener:(...args:any[]) => void) =>void;
-    emit:(event:string, ...args:any[])=>void;
+    call: (proto: any) => void;
+    on: (event: string, listener: (...args: any[]) => void) => void;
+    emit: (event: string, ...args: any[]) => void;
 }
 //noinspection TypeScriptUnresolvedFunction
 asEvented.call(Warehouse.prototype);

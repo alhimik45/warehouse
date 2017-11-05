@@ -21,23 +21,23 @@ export class ResourceManager extends UserValuesManager {
         this.renderList();
     }
 
-    protected getEntityName():string {
+    protected getEntityName(): string {
         return 'resource';
     }
 
-    protected getFormWidth():number {
+    protected getFormWidth(): number {
         return 450;
     }
 
-    protected getFormHeight():number {
+    protected getFormHeight(): number {
         return 500;
     }
 
-    protected getMultiObjects(resource:ResourceDescription):Array<any> {
+    protected getMultiObjects(resource: ResourceDescription): Array<any> {
         return [];
     }
 
-    protected createEntity(formData:any):any {
+    protected createEntity(formData: any): any {
         return new ResourceDescription(
             formData.name,
             formData.quality || 100,
@@ -45,14 +45,14 @@ export class ResourceManager extends UserValuesManager {
             formData.image || null);
     }
 
-    protected setFormValues(resource:ResourceDescription):void {
+    protected setFormValues(resource: ResourceDescription): void {
         this._form.find('[name="name"]').val(resource.name);
         this._form.find('[name="quality"]').val(resource.quality);
         this._form.find('[name="rent"]').val(resource.rent);
         this._form.find('[name="image"]').val(resource.image);
     }
 
-    get resources():Array<ResourceDescription> {
+    get resources(): Array<ResourceDescription> {
         return this._entities;
     }
 }

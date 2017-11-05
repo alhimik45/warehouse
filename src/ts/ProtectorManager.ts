@@ -9,7 +9,7 @@ import {ProtectorLimiter} from "./ProtectorLimiter";
 //Управление списком средств защиты
 export class ProtectorManager extends UserValuesManager {
 
-    constructor(badFactors:Array<BadFactorDescription>) {
+    constructor(badFactors: Array<BadFactorDescription>) {
         super(badFactors);
 
         this._entities.push(new Protector('Отрава', 50, 20,
@@ -34,23 +34,23 @@ export class ProtectorManager extends UserValuesManager {
         this.renderList();
     }
 
-    protected getEntityName():string {
+    protected getEntityName(): string {
         return 'protector';
     }
 
-    protected getFormWidth():number {
+    protected getFormWidth(): number {
         return 450;
     }
 
-    protected getFormHeight():number {
+    protected getFormHeight(): number {
         return 550;
     }
 
-    protected getMultiObjects(protector:Protector):Array<BadFactorDescription> {
+    protected getMultiObjects(protector: Protector): Array<BadFactorDescription> {
         return protector.goodAgainst;
     }
 
-    protected createEntity(formData:any):any {
+    protected createEntity(formData: any): any {
         let badFactorArray = this.getMultiSelectedObjects(formData);
         return new Protector(
             formData.name,
@@ -59,13 +59,13 @@ export class ProtectorManager extends UserValuesManager {
             badFactorArray);
     }
 
-    protected setFormValues(protector:Protector):void {
+    protected setFormValues(protector: Protector): void {
         this._form.find('[name="name"]').val(protector.name);
         this._form.find('[name="cost"]').val(protector.cost);
         this._form.find('[name="damage"]').val(protector.damage);
     }
 
-    get protectors():Array<IProtector> {
+    get protectors(): Array<IProtector> {
         return this._entities;
     }
 }

@@ -7,7 +7,7 @@ import {selectIndexes} from "./util";
 export class BadFactorManager extends UserValuesManager {
 
 
-    constructor(resources:Array<ResourceDescription>) {
+    constructor(resources: Array<ResourceDescription>) {
         super(resources);
 
         this._entities.push(new BadFactorDescription('Крысы', 15, 50,
@@ -26,23 +26,23 @@ export class BadFactorManager extends UserValuesManager {
         this.renderList();
     }
 
-    protected getEntityName():string {
+    protected getEntityName(): string {
         return 'bad-factor';
     }
 
-    protected getFormWidth():number {
+    protected getFormWidth(): number {
         return 450;
     }
 
-    protected getFormHeight():number {
+    protected getFormHeight(): number {
         return 650;
     }
 
-    protected getMultiObjects(badFactor:BadFactorDescription):Array<ResourceDescription> {
+    protected getMultiObjects(badFactor: BadFactorDescription): Array<ResourceDescription> {
         return badFactor.affectedResources;
     }
 
-    protected createEntity(formData:any):any {
+    protected createEntity(formData: any): any {
         let resourceArray = this.getMultiSelectedObjects(formData);
         return new BadFactorDescription(
             formData.name,
@@ -51,13 +51,13 @@ export class BadFactorManager extends UserValuesManager {
             resourceArray);
     }
 
-    protected setFormValues(badFactor:BadFactorDescription):void {
+    protected setFormValues(badFactor: BadFactorDescription): void {
         this._form.find('[name="name"]').val(badFactor.name);
         this._form.find('[name="damage"]').val(badFactor.damage);
         this._form.find('[name="hitpoints"]').val(badFactor.hitPoints);
     }
 
-    get badFactors():Array<BadFactorDescription> {
+    get badFactors(): Array<BadFactorDescription> {
         return this._entities;
     }
 }
