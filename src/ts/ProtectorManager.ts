@@ -4,6 +4,7 @@ import {UserValuesManager} from "./UserValuesManager";
 import {Protector} from "./Protector";
 import {IProtector} from "./IProtector";
 import {ProtectorLimiter} from "./ProtectorLimiter";
+import {ProtectorBuilder} from "./ProtectorBuilder";
 
 
 //Управление списком средств защиты
@@ -51,12 +52,14 @@ export class ProtectorManager extends UserValuesManager {
     }
 
     protected createEntity(formData: any): any {
-        let badFactorArray = this.getMultiSelectedObjects(formData);
-        return new Protector(
-            formData.name,
-            formData.cost || 1,
-            formData.damage || 10,
-            badFactorArray);
+        let builder = new ProtectorBuilder()
+            .setName(formData.name)
+            .setDamage(formData.damage)
+            .setCost(formData.cost);
+        for (let factor of this.getMultiSelectedObjects(formData)) {
+            builder.addBadFactor(factor)
+        }
+        return builder.build();
     }
 
     protected setFormValues(protector: Protector): void {

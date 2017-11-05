@@ -344,6 +344,23 @@ class ReversedSortIteratorCreator {
     createIterator(): AbstractIterator
 }
 
+class ProtectorBuilder {
+  -_name: string;
+  -_goodAgainst: Array<BadFactorDescription>;
+  -_cost: number;
+  -_damage: number;
+
+  +constructor()
+  +setName(name: string): ProtectorBuilder
+  +setCost(cost: number): ProtectorBuilder
+  +setDamage(damage: number): ProtectorBuilder
+  +addBadFactor(factor: BadFactorDescription): ProtectorBuilder
+  +build(): Protector
+}
+
+ProtectorManager *-- ProtectorBuilder
+Protector <.. ProtectorBuilder
+
 IteratorCreator <|-- SortIteratorCreator
 SortIterator <.. SortIteratorCreator
 IteratorCreator <|-- ReversedSortIteratorCreator
@@ -395,7 +412,6 @@ IComparable <.. SortIterator
 IComparable <.. InverseIterator
 IComparable <.. FilterIterator
 
-ProtectorManager *-- Protector
 ResourceManager *-- ResourceDescription
 BadFactorManager *-- BadFactorDescription
 
