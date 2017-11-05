@@ -328,6 +328,26 @@ class TemplateFactory {
     +getTemplate(name: string)
 }
 
+interface IteratorCreator {
+    createIterator(): AbstractIterator
+}
+
+class SortIteratorCreator {
+    constructor(objects: Array)
+    createIterator(): AbstractIterator
+}
+
+class ReversedSortIteratorCreator {
+    constructor(objects: Array)
+    createIterator(): AbstractIterator
+}
+
+IteratorCreator <|-- SortIteratorCreator
+SortIterator <.. SortIteratorCreator
+IteratorCreator <|-- ReversedSortIteratorCreator
+SortIterator <.. ReversedSortIteratorCreator
+InverseIterator <.. ReversedSortIteratorCreator
+
 TemplateFactory *-- Template
 GameManager ..> TemplateFactory
 UserValuesManager ..> TemplateFactory
@@ -365,8 +385,8 @@ BadFactor ..> Cell
 GameLogicFacade ..> IProtector
 UserValuesManager ..> IComparable
 
-UserValuesManager ..> SortIterator
-UserValuesManager ..> InverseIterator
+UserValuesManager ..> SortIteratorCreator
+UserValuesManager ..> ReversedSortIteratorCreator
 UserValuesManager ..> FilterIterator
 
 IComparable <.. SortIterator

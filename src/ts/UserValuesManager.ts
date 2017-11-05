@@ -1,10 +1,10 @@
 //Общий класс для тех вещей которые пользователь добавляет/изменяет/удаляет
-import {SortIterator} from "./SortIterator";
 import {Helpers} from "./Helpers";
-import {AbstractIterator} from "./AbstractIterator";
-import {InverseIterator} from "./InverseIterator";
 import {FilterIterator} from "./FilterIterator";
 import {TemplateFactory} from "./TemplateFactory";
+import {IteratorCreator} from "./IteratorCreator";
+import {SortIteratorCreator} from "./SortIteratorCreator";
+import {ReversedSortIteratorCreator} from "./ReversedSortIteratorCreator";
 
 export abstract class UserValuesManager {
     //окно с формой для добавления/изменения сущности
@@ -22,7 +22,7 @@ export abstract class UserValuesManager {
     //объекты для мультивыбора
     protected _multiObjects: Array<any> = null;
     //создание нужного итератора
-    protected _iteratorFactory: () => AbstractIterator<any> = () => new SortIterator(this._entities);
+    protected _iteratorFactory: IteratorCreator = new SortIteratorCreator(this._entities);
 
     constructor(multiObjects?: Array<any>) {
         this._modal = $(this.getFormId()).dialog({
@@ -67,7 +67,7 @@ export abstract class UserValuesManager {
         });
 
         $(document).on('click', this.getSortUpId(), function () {
-            self._iteratorFactory = () => new SortIterator(self._entities);
+            self._iteratorFactory = new SortIteratorCreator(self._entities);
             $(self.getSortDownId()).removeClass("btn-success");
             $(self.getSortDownId()).addClass("btn-danger");
             $(self.getSortUpId()).removeClass("btn-danger");
@@ -76,7 +76,7 @@ export abstract class UserValuesManager {
         });
 
         $(document).on('click', this.getSortDownId(), function () {
-            self._iteratorFactory = () => new InverseIterator(new SortIterator(self._entities));
+            self._iteratorFactory = new ReversedSortIteratorCreator(self._entities);
             $(self.getSortUpId()).removeClass("btn-success");
             $(self.getSortUpId()).addClass("btn-danger");
             $(self.getSortDownId()).removeClass("btn-danger");
@@ -257,7 +257,7 @@ export abstract class UserValuesManager {
     protected renderList() {
         let context: any = {};
         this._entities.forEach((e, i) => e.idx = i);
-        context[this.getEntityName()] = Helpers.enumerate(new FilterIterator(this._iteratorFactory(), $(this.getFilterId()).val()));
+        context[this.getEntityName()] = Helpers.enumerate(new FilterIterator(this._iteratorFactory.createIterator(), $(this.getFilterId()).val()));
         this._list.html(TemplateFactory.getTemplate(this.getListTemplateName()).getHtml(context));
     }
 }
