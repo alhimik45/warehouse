@@ -2,7 +2,7 @@ import {Cell} from "./Cell";
 import {BadFactorDescription} from "./BadFactorDescription";
 import {BadFactor} from "./BadFactor";
 import {ResourceDescription} from "./ResourceDescription";
-import {Resource} from "./Resource";
+import {ResourcePool} from "./ResourcePool";
 
 import asEvented = require('./asevented.min.js');
 
@@ -63,6 +63,7 @@ export class Warehouse implements IEventEmitter {
             ++i;
         }
         for (let idx of cellsToRemove) {
+            ResourcePool.getInstance().release(this._cells[idx].resource);
             this._cells[idx] = new Cell(null, 0);
         }
     }
@@ -105,7 +106,9 @@ export class Warehouse implements IEventEmitter {
             if (Math.random() < 0.15) {
                 let randomResource = this._resources[Math.floor(Math.random() * this._resources.length)];
                 let storeDays = Math.floor(Math.random() * 15) + 1;
-                let cell = new Cell(new Resource(randomResource), storeDays);
+                let resource = ResourcePool.getInstance().acquire();
+                resource.description = randomResource;
+                let cell = new Cell(resource, storeDays);
                 this._cells[this.getEmptyIndex()] = cell;
                 this.emit('new-cell', cell);
             }

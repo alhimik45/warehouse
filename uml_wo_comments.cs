@@ -274,7 +274,7 @@ class GameManager {
 }
 
 class GameLogicFacade {
-    -Instance: GameLogicFacade
+    - {static} instance: GameLogicFacade
     +onCellRent
     +onNewResource
     +onBadFactorSpread
@@ -287,7 +287,7 @@ class GameLogicFacade {
     -_days: number;
 
     -constructor()
-    +getInstance():GameLogicFacade
+    + {static} getInstance():GameLogicFacade
     +startGame(): void
     +nextDay(): void
     +increaseWarehouseCapacity(): boolean
@@ -358,6 +358,19 @@ class ProtectorBuilder {
   +build(): Protector
 }
 
+class ResourcePool {
+  - {static} _instance: ResourcePool;
+  -_pool: Map<Resource, boolean> = new Map();
+  -constructor()
+  +{static} getInstance()
+  +acquire(): Resource
+  +release(res: Resource): void
+}
+
+
+ResourcePool o-- Resource
+Cell ..> ResourcePool
+Warehouse ..> ResourcePool
 ProtectorManager *-- ProtectorBuilder
 Protector <.. ProtectorBuilder
 

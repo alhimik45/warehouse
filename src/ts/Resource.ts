@@ -18,6 +18,11 @@ export class Resource {
         return this._description;
     }
 
+    set description(value: ResourceDescription) {
+        this._description = value;
+        this._quality = value.quality;
+    }
+
     //Возвращает качество ресурса
     get quality(): number {
         return this._quality;

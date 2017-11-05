@@ -1,5 +1,6 @@
 import {BadFactor} from "./BadFactor";
 import {Resource} from "./Resource";
+import {ResourcePool} from "./ResourcePool";
 
 //Одно место на складе
 export class Cell {
@@ -20,8 +21,13 @@ export class Cell {
     }
 
     public clone(): Cell {
+        let resource: Resource = null;
+        if (this.resource != null) {
+            resource = ResourcePool.getInstance().acquire();
+            resource.description = this.resource.description;
+        }
         let cell = new Cell(
-            this.resource != null ? new Resource(this.resource.description) : null,
+            resource,
             this.storeDays
         );
         cell._restStoreDays = this._restStoreDays;
