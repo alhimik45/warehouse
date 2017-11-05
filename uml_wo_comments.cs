@@ -397,6 +397,7 @@ GameLogicFacade *-- ProtectorManager
 GameLogicFacade *-- BadFactorManager
 GameLogicFacade *-- Warehouse
 GameLogicFacade *-- ResourceProtectorAdapter
+GameLogicFacade *-- GameLogicFacade
 
 Protector ..> Cell
 ResourceProtectorAdapter ..> Cell
