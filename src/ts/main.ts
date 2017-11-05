@@ -1,5 +1,6 @@
 import {GameManager} from "./GameManager";
+import {GameLogicFacade} from "./GameLogicFacade";
 
 $(()=> {
-    let _ = new GameManager;
+    let _ = new GameManager(new GameLogicFacade());
 });

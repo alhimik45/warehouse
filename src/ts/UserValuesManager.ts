@@ -22,7 +22,7 @@ export abstract class UserValuesManager {
     //объекты для мультивыбора
     protected _multiObjects: Array<any> = null;
     //создание нужного итератора
-    protected _iteratorFactory: () => AbstractIterator = () => new SortIterator(this._entities);
+    protected _iteratorFactory: () => AbstractIterator<any> = () => new SortIterator(this._entities);
 
     constructor(multiObjects?: Array<any>) {
         this._modal = $(this.getFormId()).dialog({

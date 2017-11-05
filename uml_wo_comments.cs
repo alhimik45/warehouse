@@ -258,21 +258,15 @@ class GameManager {
     -_activeScreen:JQuery;
     -_loseModal:JQuery;
     -_protectorsModal:JQuery;
-    -_resourceManager:ResourceManager;
-    -_badFactorManager:BadFactorManager;
-    -_protectorManager:ProtectorManager;
-    -_warehouse:Warehouse;
     -_messages:Array<string>;
-    -_money:number;
-    -_days:number;
     -_messagesTemplate:HandlebarsTemplateDelegate;
     -_infoTemplate:HandlebarsTemplateDelegate;
     -_cellTemplate:HandlebarsTemplateDelegate;
     -_protectorTemplate:HandlebarsTemplateDelegate;
     -_cellIdx:number = -1;
+    -_logic:GameLogicFacade;
 
-    +constructor()
-    -allProtectors():Array<IProtector>
+    +constructor(logic: GameLogicFacade)
     -openScreen(screen:JQuery):void
     -update():void
     -checkLose():void
@@ -285,6 +279,31 @@ class GameManager {
     -startGame()
 }
 
+class GameLogicFacade {
+    +onCellRent
+    +onNewResource
+    +onBadFactorSpread
+    +onCellResourceDestroyed
+    -_resourceManager: ResourceManager;
+    -_badFactorManager: BadFactorManager;
+    -_protectorManager: ProtectorManager;
+    -_warehouse: Warehouse;
+    -_money: number;
+    -_days: number;
+
+    +constructor()
+    +startGame(): void
+    +nextDay(): void
+    +increaseWarehouseCapacity(): boolean
+    +applyProtector(cellIdx: number, protectorIdx: number)
+    +getNewCellCost(): number
+    +isLose(): boolean
+    +getCellProtectors(cellIdx: number): Array<ProtectorTemplateData>
+    +getInfo(): InformationTemplateData
+    +getCells(): Array<Cell>
+    -allProtectors(): Array<IProtector>
+}
+
 
 BadFactor o-- BadFactorDescription
 
@@ -295,15 +314,16 @@ BadFactorManager --|> UserValuesManager
 Cell o-- BadFactor
 Cell o-- Resource
 
-GameManager *-- ResourceManager
-GameManager *-- ProtectorManager
-GameManager *-- BadFactorManager
-GameManager *-- Warehouse
+GameManager o-- GameLogicFacade
+GameLogicFacade *-- ResourceManager
+GameLogicFacade *-- ProtectorManager
+GameLogicFacade *-- BadFactorManager
+GameLogicFacade *-- Warehouse
 
 Protector ..> Cell
 ResourceProtectorAdapter ..> Cell
 BadFactor ..> Cell
-GameManager ..> IProtector
+GameLogicFacade ..> IProtector
 UserValuesManager ..> IComparable
 
 UserValuesManager ..> SortIterator
