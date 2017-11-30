@@ -8,16 +8,16 @@ import {ProtectorTemplateData} from "./ProtectorTemplateData";
 import {InformationTemplateData} from "./InformationTemplateData";
 import {Cell} from "./Cell";
 import {CellType} from "./CellType";
-import {BadFactor} from "./BadFactor";
 import {selectIndexes} from "./util";
 import {BadFactorDescription} from "./BadFactorDescription";
+import {Observer, WrapObserver} from "./Subject";
 
 export class GameLogicFacade {
     private static _instance: GameLogicFacade;
-    public onCellRent: (cell: Cell, rent: number) => void;
-    public onNewResource: (cell: Cell) => void;
-    public onBadFactorSpread: (cell: Cell, i: number) => void;
-    public onCellResourceDestroyed: (cell: Cell, penalty: number, i: number) => void;
+    public onCellRent: Observer;
+    public onNewResource: Observer;
+    public onBadFactorSpread: Observer;
+    public onCellResourceDestroyed: Observer;
     //объект, управляющий списком ресурсов
     private _resourceManager: ResourceManager;
     //объект, управляющий списком плохих факторов
@@ -62,21 +62,15 @@ export class GameLogicFacade {
         this._warehouse = new Warehouse(this._resourceManager.resources,
             this._badFactorManager.badFactors);
 
-        this._warehouse.on('cell-rent', (cell: Cell, rent: number) => {
-            this._money += rent;
-            this.onCellRent && this.onCellRent(cell, rent);
-        });
-        this._warehouse.on('new-cell', (cell: Cell) => {
-            this.onNewResource && this.onNewResource(cell);
-        });
-        this._warehouse.on('bad-factor-spread', (cell: Cell, i: number) => {
-            this.onBadFactorSpread && this.onBadFactorSpread(cell, i);
-        });
-        this._warehouse.on('cell-resource-destroyed', (cell: Cell, penalty: number, i: number) => {
+        this._warehouse.attach('cell-rent', new WrapObserver(this.onCellRent, (data :any)=> {
+            this._money += data.rent;
+        }));
+        this._warehouse.attach('new-cell', this.onNewResource);
+        this._warehouse.attach('bad-factor-spread', this.onBadFactorSpread);
+        this._warehouse.attach('cell-resource-destroyed', new WrapObserver(this.onCellResourceDestroyed, (data :any)=> {
             //получаем штраф
-            this._money -= penalty;
-            this.onCellResourceDestroyed && this.onCellResourceDestroyed(cell, penalty, i)
-        });
+            this._money -= data.penalty;
+        }));
     }
 
     public nextDay(): void {
@@ -142,11 +136,11 @@ export class GameLogicFacade {
         return this._warehouse.cells;
     }
 
-    public getBadFires():Array<BadFactorDescription>{
+    public getBadFires(): Array<BadFactorDescription> {
         return selectIndexes(this._badFactorManager.badFactors, [2]);
     }
 
-    public getBadBugs():Array<BadFactorDescription>{
-        return selectIndexes(this._badFactorManager.badFactors, [0,1]);
+    public getBadBugs(): Array<BadFactorDescription> {
+        return selectIndexes(this._badFactorManager.badFactors, [0, 1]);
     }
 }

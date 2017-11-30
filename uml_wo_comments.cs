@@ -275,10 +275,10 @@ class GameManager {
 
 class GameLogicFacade {
     - {static} instance: GameLogicFacade
-    +onCellRent
-    +onNewResource
-    +onBadFactorSpread
-    +onCellResourceDestroyed
+    +onCellRent: Observer
+    +onNewResource: Observer
+    +onBadFactorSpread: Observer
+    +onCellResourceDestroyed: Observer
     -_resourceManager: ResourceManager;
     -_badFactorManager: BadFactorManager;
     -_protectorManager: ProtectorManager;
@@ -380,6 +380,50 @@ class CellBuilder {
   +build(): Cell
 }
 
+abstract class Subject {
+    -evs: string => Observer
+    +constructor()
+    +attach(e: string, o: Observer)
+    +detach(e: string, o: Observer)
+    +notify(e: string, data: any)
+}
+
+abstract class Observer {
+    +constructor()
+    +update(data: any)
+}
+
+class WrapObserver {
+    -o: Observer;
+    -a: action;
+
+    +constructor(o: Observer, a: action)
+    +update(data: any)
+}
+
+
+abstract class OObserver {
+    #message: action;
+
+    +constructor(message: action)
+}
+
+
+
+Observer <|-- WrapObserver
+Observer <|-- OObserver
+OObserver <|-- SpreadObserver
+OObserver <|-- ResourceObserver
+OObserver <|-- NewResourceObserver
+OObserver <|-- RentObserver
+GameManager *-- SpreadObserver
+GameManager *-- ResourceObserver
+GameManager *-- NewResourceObserver
+GameManager *-- RentObserver
+Warehouse *-- WrapObserver
+Subject <|-- Warehouse
+Observer --o Subject
+Observer --o Warehouse
 
 ResourcePool o-- Resource
 Cell ..> ResourcePool

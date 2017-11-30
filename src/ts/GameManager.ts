@@ -2,6 +2,7 @@ import {Cell} from "./Cell";
 import {GameLogicFacade} from "./GameLogicFacade";
 import {TemplateFactory} from "./TemplateFactory";
 import {CellType} from "./CellType";
+import {Observer} from "./Subject";
 
 //Класс, отвечающий за игровой интерфейс
 export class GameManager {
@@ -182,33 +183,59 @@ export class GameManager {
 
     //начать слушать события склада
     private attachEventHandlers(): void {
-        GameLogicFacade.getInstance().onCellRent = (cell: Cell, rent: number) => {
-            let cellQuality = Math.round(cell.resource.quality / cell.resource.description.quality * 100);
-            this.message(`Вы получили <b>${rent}руб.</b> за хранение
-            <i>${cell.resource.description.name}</i> с качеством <b>${cellQuality}%</b>`);
-        };
-        GameLogicFacade.getInstance().onNewResource = (cell: Cell) => {
-            this.message(`Завезли новый товар <b>${cell.resource.description.name}</b>
-            на срок <b>${cell.storeDays}дн.</b>`);
-        };
-        GameLogicFacade.getInstance().onBadFactorSpread = (cell: Cell, i: number) => {
-            this.message(`<font color="#a52a2a">
-            На месте <b>№${i}</b> появилось <b>${cell.badFactor.description.name}</b>
-            </font>`);
-        };
-        GameLogicFacade.getInstance().onCellResourceDestroyed = (cell: Cell, penalty: number, i: number) => {
-            this.message(`<font color="#a52a2a">
-            Товар на месте <b>№${i}</b> был уничтожен из-за <b>${cell.badFactor.description.name}</b>.<br/>
-            Было потеряно <b>${penalty}руб.</b>
-            </font>`);
-        };
+        GameLogicFacade.getInstance().onCellRent = new RentObserver(this.message.bind(this));
+        GameLogicFacade.getInstance().onNewResource = new NewResourceObserver(this.message.bind(this));
+        GameLogicFacade.getInstance().onBadFactorSpread = new SpreadObserver(this.message.bind(this));
+        GameLogicFacade.getInstance().onCellResourceDestroyed = new ResourceObserver(this.message.bind(this));
     }
 
-    //начать игру: инициальзировать нужные переменные
+    //начать игру: инициализировать нужные переменные
     private startGame() {
         this._messages = [];
-        GameLogicFacade.getInstance().startGame();
         this.attachEventHandlers();
+        GameLogicFacade.getInstance().startGame();
         this.update();
+    }
+}
+
+
+abstract class OObserver extends Observer{
+    protected message: any;
+
+    constructor(message: any) {
+        super();
+        this.message = message;
+    }
+}
+
+class ResourceObserver extends OObserver{
+    update(data: any) {
+        this.message(`<font color="#a52a2a">
+            Товар на месте <b>№${data.i}</b> был уничтожен из-за <b>${data.cell.badFactor.description.name}</b>.<br/>
+            Было потеряно <b>${data.penalty}руб.</b>
+            </font>`);
+    }
+}
+
+class SpreadObserver extends OObserver{
+    update(data: any) {
+        this.message(`<font color="#a52a2a">
+            На месте <b>№${data.i}</b> появилось <b>${data.cell.badFactor.description.name}</b>
+            </font>`);
+    }
+}
+
+class NewResourceObserver extends OObserver{
+    update(data: any) {
+        this.message(`Завезли новый товар <b>${data.cell.resource.description.name}</b>
+            на срок <b>${data.cell.storeDays}дн.</b>`);
+    }
+}
+
+class RentObserver extends OObserver{
+    update(data: any) {
+        let cellQuality = Math.round(data.cell.resource.quality / data.cell.resource.description.quality * 100);
+        this.message(`Вы получили <b>${data.rent}руб.</b> за хранение
+            <i>${data.cell.resource.description.name}</i> с качеством <b>${cellQuality}%</b>`);
     }
 }

@@ -5,11 +5,10 @@ import {ResourceDescription} from "./ResourceDescription";
 import {ResourcePool} from "./ResourcePool";
 import {CellType} from "./CellType";
 import {CellBuilder} from "./CellBuilder";
-
-import asEvented = require('./asevented.min.js');
+import {Subject} from "./Subject";
 
 //Склад
-export class Warehouse implements IEventEmitter {
+export class Warehouse extends Subject{
     //Максимальное количество мест на складе
     private _capacity: number = 0;
     //Занятые места на складе
@@ -21,6 +20,7 @@ export class Warehouse implements IEventEmitter {
 
 
     constructor(resources: Array<ResourceDescription>, badFactors: Array<BadFactorDescription>) {
+        super();
         this._resources = resources;
         this._badFactors = badFactors;
         for (let i = 0; i < this._capacity; ++i) {
@@ -49,17 +49,16 @@ export class Warehouse implements IEventEmitter {
             if (cell.resource !== null) {
                 if (cell.badFactor) {
                     cell.badFactor.apply(cell);
-                    this.emit('cell-resource-damaged', cell);
                     if (cell.resource.quality <= 0) {
                         cellsToRemove.push(i);
-                        this.emit('cell-resource-destroyed', cell, this.cellPenalty(cell), i);
+                        this.notify('cell-resource-destroyed', {cell: cell, penalty: this.cellPenalty(cell), i:i});
                         continue;
                     }
                 }
                 cell.restStoreDays -= 1;
                 if (cell.restStoreDays <= 0) {
                     cellsToRemove.push(i);
-                    this.emit('cell-rent', cell, this.cellRent(cell));
+                    this.notify('cell-rent', {cell:cell, rent:this.cellRent(cell)});
                 }
             }
             ++i;
@@ -81,7 +80,7 @@ export class Warehouse implements IEventEmitter {
                         factor.canAffectTo(cell.resource) &&
                         Math.random() < 0.2) {
                         cell.badFactor = new BadFactor(factor);
-                        this.emit('bad-factor-spread', cell, i);
+                        this.notify('bad-factor-spread', {cell:cell, i:i});
                     }
                 }
             }
@@ -116,7 +115,7 @@ export class Warehouse implements IEventEmitter {
                     .setResists(this._cells[this.getEmptyIndex()].resists)
                     .build();
                 this._cells[this.getEmptyIndex()] = cell;
-                this.emit('new-cell', cell);
+                this.notify('new-cell', {cell:cell});
             }
         }
     }
@@ -179,11 +178,4 @@ export class Warehouse implements IEventEmitter {
         }
         return corrupted;
     }
-
-    //для asEvented
-    call: (proto: any) => void;
-    on: (event: string, listener: (...args: any[]) => void) => void;
-    emit: (event: string, ...args: any[]) => void;
 }
-//noinspection TypeScriptUnresolvedFunction
-asEvented.call(Warehouse.prototype);
