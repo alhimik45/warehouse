@@ -367,6 +367,19 @@ class ResourcePool {
   +release(res: Resource): void
 }
 
+class CellBuilder {
+  -_resource: Resource;
+  -_storeDays: number;
+  -_resists: Array<BadFactorDescription>;
+
+  +setResource(resource: Resource): CellBuilder
+  +setStoreDays(days: number): CellBuilder
+  +setResists(resists: Array<BadFactorDescription>): CellBuilder
+  +makeAntiFire(): CellBuilder
+  +makeAntiBug(): CellBuilder
+  +build(): Cell
+}
+
 
 ResourcePool o-- Resource
 Cell ..> ResourcePool
@@ -454,7 +467,8 @@ ResourceManager --|> UserValuesManager
 
 IProtector --|> IResourceApplicator
 
-Warehouse *-- Cell
+Warehouse *-- CellBuilder
+Cell <.. CellBuilder
 Warehouse *-- BadFactor
 
 @enduml

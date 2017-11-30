@@ -7,6 +7,10 @@ import {ResourceProtectorAdapter} from "./ResourceProtectorAdapter";
 import {ProtectorTemplateData} from "./ProtectorTemplateData";
 import {InformationTemplateData} from "./InformationTemplateData";
 import {Cell} from "./Cell";
+import {CellType} from "./CellType";
+import {BadFactor} from "./BadFactor";
+import {selectIndexes} from "./util";
+import {BadFactorDescription} from "./BadFactorDescription";
 
 export class GameLogicFacade {
     private static _instance: GameLogicFacade;
@@ -53,7 +57,7 @@ export class GameLogicFacade {
     }
 
     public startGame(): void {
-        this._money = 6666;
+        this._money = 999999;
         this._days = 0;
         this._warehouse = new Warehouse(this._resourceManager.resources,
             this._badFactorManager.badFactors);
@@ -80,10 +84,10 @@ export class GameLogicFacade {
         this._days += 1;
     }
 
-    public increaseWarehouseCapacity(): boolean {
+    public increaseWarehouseCapacity(type: CellType): boolean {
         if (this._money >= this._warehouse.cellCost) {
             this._money -= this._warehouse.cellCost;
-            this._warehouse.capacity += 1;
+            this._warehouse.increaseCapacity(type);
             return true;
         }
         return false;
@@ -136,5 +140,13 @@ export class GameLogicFacade {
 
     public getCells(): Array<Cell> {
         return this._warehouse.cells;
+    }
+
+    public getBadFires():Array<BadFactorDescription>{
+        return selectIndexes(this._badFactorManager.badFactors, [2]);
+    }
+
+    public getBadBugs():Array<BadFactorDescription>{
+        return selectIndexes(this._badFactorManager.badFactors, [0,1]);
     }
 }

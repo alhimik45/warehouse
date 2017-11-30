@@ -1,6 +1,7 @@
 import {Cell} from "./Cell";
 import {GameLogicFacade} from "./GameLogicFacade";
 import {TemplateFactory} from "./TemplateFactory";
+import {CellType} from "./CellType";
 
 //Класс, отвечающий за игровой интерфейс
 export class GameManager {
@@ -74,7 +75,23 @@ export class GameManager {
             this.update();
         });
         $('#increase-capacity').click(() => {
-            if (GameLogicFacade.getInstance().increaseWarehouseCapacity()) {
+            if (GameLogicFacade.getInstance().increaseWarehouseCapacity(CellType.Simple)) {
+                this.update();
+            } else {
+                alert('Нехватает денег');
+            }
+        });
+
+        $('#increase-capacity-fire').click(() => {
+            if (GameLogicFacade.getInstance().increaseWarehouseCapacity(CellType.Antifire)) {
+                this.update();
+            } else {
+                alert('Нехватает денег');
+            }
+        });
+
+        $('#increase-capacity-bug').click(() => {
+            if (GameLogicFacade.getInstance().increaseWarehouseCapacity(CellType.Antibug)) {
                 this.update();
             } else {
                 alert('Нехватает денег');
@@ -112,6 +129,8 @@ export class GameManager {
         $messages.html(TemplateFactory.getTemplate("messages").getHtml({message: this._messages}));
         $messages.scrollTop($messages[0].scrollHeight);
         $('#cell-cost').text(GameLogicFacade.getInstance().getNewCellCost());
+        $('#cell-cost-fire').text(GameLogicFacade.getInstance().getNewCellCost() * 1.2);
+        $('#cell-cost-bug').text(GameLogicFacade.getInstance().getNewCellCost() * 1.3);
         this.updateInfo();
         this.updateCells();
         this.checkLose();

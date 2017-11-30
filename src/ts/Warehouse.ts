@@ -3,13 +3,15 @@ import {BadFactorDescription} from "./BadFactorDescription";
 import {BadFactor} from "./BadFactor";
 import {ResourceDescription} from "./ResourceDescription";
 import {ResourcePool} from "./ResourcePool";
+import {CellType} from "./CellType";
+import {CellBuilder} from "./CellBuilder";
 
 import asEvented = require('./asevented.min.js');
 
 //Склад
 export class Warehouse implements IEventEmitter {
     //Максимальное количество мест на складе
-    private _capacity: number = 10;
+    private _capacity: number = 0;
     //Занятые места на складе
     private _cells: Array<Cell> = [];
     //Список ресурсов, которые могут прийти на склад
@@ -22,7 +24,7 @@ export class Warehouse implements IEventEmitter {
         this._resources = resources;
         this._badFactors = badFactors;
         for (let i = 0; i < this._capacity; ++i) {
-            this._cells.push(new Cell(null, 0));
+            this._cells.push(new CellBuilder().build());
         }
     }
 
@@ -64,7 +66,7 @@ export class Warehouse implements IEventEmitter {
         }
         for (let idx of cellsToRemove) {
             ResourcePool.getInstance().release(this._cells[idx].resource);
-            this._cells[idx] = new Cell(null, 0);
+            this._cells[idx] = new CellBuilder().setResists(this._cells[idx].resists).build();
         }
     }
 
@@ -108,7 +110,11 @@ export class Warehouse implements IEventEmitter {
                 let storeDays = Math.floor(Math.random() * 15) + 1;
                 let resource = ResourcePool.getInstance().acquire();
                 resource.description = randomResource;
-                let cell = new Cell(resource, storeDays);
+                let cell = new CellBuilder()
+                    .setResource(resource)
+                    .setStoreDays(storeDays)
+                    .setResists(this._cells[this.getEmptyIndex()].resists)
+                    .build();
                 this._cells[this.getEmptyIndex()] = cell;
                 this.emit('new-cell', cell);
             }
@@ -125,6 +131,20 @@ export class Warehouse implements IEventEmitter {
         this.processCells();
         this.spreadBadFactors();
         this.processNewCells();
+    }
+
+    public increaseCapacity(type: CellType) {
+        this._capacity += 1;
+        let cellBuilder = new CellBuilder();
+        switch (type) {
+            case CellType.Antibug:
+                cellBuilder.makeAntiBug();
+                break;
+            case CellType.Antifire:
+                cellBuilder.makeAntiFire();
+                break;
+        }
+        this._cells.push(cellBuilder.build());
     }
 
     //Возвращает массив занятых ячеек склада
@@ -158,17 +178,6 @@ export class Warehouse implements IEventEmitter {
             ++i;
         }
         return corrupted;
-    }
-
-    //Устанавливает максимальное количество мест на складе
-    set capacity(value: number) {
-        if (this._capacity < value) {
-            let diff = value - this._capacity;
-            for (let i = 0; i < diff; ++i) {
-                this._cells.push(new Cell(null, 0));
-            }
-        }
-        this._capacity = value;
     }
 
     //для asEvented

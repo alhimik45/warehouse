@@ -1,6 +1,7 @@
 import {BadFactor} from "./BadFactor";
 import {Resource} from "./Resource";
 import {ResourcePool} from "./ResourcePool";
+import {BadFactorDescription} from "./BadFactorDescription";
 
 //Одно место на складе
 export class Cell {
@@ -12,12 +13,14 @@ export class Cell {
     private _restStoreDays: number;
     //Время хранения ресурса
     private _storeDays: number;
+    private _resists: Array<BadFactorDescription>;
 
 
-    constructor(resource: Resource, storeDays: number) {
+    constructor(resource: Resource, storeDays: number, resists: Array<BadFactorDescription>) {
         this._resource = resource;
         this._storeDays = storeDays;
         this._restStoreDays = storeDays;
+        this._resists = resists;
     }
 
     public clone(): Cell {
@@ -28,7 +31,8 @@ export class Cell {
         }
         let cell = new Cell(
             resource,
-            this.storeDays
+            this.storeDays,
+            this._resists
         );
         cell._restStoreDays = this._restStoreDays;
         if (this._badFactor != null) {
@@ -58,6 +62,10 @@ export class Cell {
         return this._restStoreDays;
     }
 
+    get resists(): Array<BadFactorDescription> {
+        return this._resists;
+    }
+
     //Устанавливает оставшееся время хранения ресурса
     set restStoreDays(value: number) {
         this._restStoreDays = value;
@@ -65,6 +73,8 @@ export class Cell {
 
     //Устанавливает плохой фактор
     set badFactor(value: BadFactor) {
-        this._badFactor = value;
+        if (!this._resists.includes(value.description)) {
+            this._badFactor = value;
+        }
     }
 }
