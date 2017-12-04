@@ -265,6 +265,7 @@ class GameManager {
     -_messages:Array<string>;
     -_cellIdx:number = -1;
     -mem:Memento;
+    -_protectorLister:ProtectorLister;
 
     +constructor()
     -openScreen(screen:JQuery):void
@@ -277,6 +278,10 @@ class GameManager {
     -message(msg:string):void
     -attachEventHandlers():void
     -startGame()
+}
+
+class ProtectorLister{
+    +getList(): string
 }
 
 class GameLogicFacade {
@@ -450,6 +455,9 @@ class DamageVisitor {
 }
 
 
+GameManager *-- ProtectorLister
+ProtectorLister ..> GameLogicFacade
+
 GameLogicFacade o-- Memento
 Memento o-- State
 GameLogicFacade ..> State
@@ -457,8 +465,8 @@ GameLogicFacade ..> State
 CostVisitor --|> Visitor
 DamageVisitor --|> Visitor
 
-GameManager ..> CostVisitor
-GameManager ..> DamageVisitor
+ProtectorLister ..> CostVisitor
+ProtectorLister ..> DamageVisitor
 
 Observer <|-- WrapObserver
 Observer <|-- OObserver

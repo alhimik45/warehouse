@@ -24,13 +24,14 @@ export class GameManager {
     //место, в котором использовать защитное средство
     private _cellIdx: number = -1;
     private _mem: Memento;
+    private _protectorLister: ProtectorLister;
 
     constructor() {
         this._startScreen = $('#start-screen');
         this._entityScreen = $('#entity-screen');
         this._gameScreen = $('#game-screen');
         this._activeScreen = this._startScreen;
-
+        this._protectorLister = new ProtectorLister();
         this._entityScreen.hide();
         this._gameScreen.hide();
 
@@ -111,11 +112,7 @@ export class GameManager {
         });
 
         $('#list').click(() => {
-            let cv = new CostVisitor();
-            let dv = new DamageVisitor();
-            alert(GameLogicFacade.getInstance().allProtectors().map(p =>{
-                return `${p.name}: Цена ${p.accept(cv)}, Урон: ${p.accept(dv)}`
-            }).join("\n"));
+            alert(this._protectorLister.getList());
         });
 
         let self = this;
@@ -256,5 +253,16 @@ class RentObserver extends OObserver {
         let cellQuality = Math.round(data.cell.resource.quality / data.cell.resource.description.quality * 100);
         this.message(`Вы получили <b>${data.rent}руб.</b> за хранение
             <i>${data.cell.resource.description.name}</i> с качеством <b>${cellQuality}%</b>`);
+    }
+}
+
+class ProtectorLister {
+
+    getList(): string {
+        let cv = new CostVisitor();
+        let dv = new DamageVisitor();
+        return GameLogicFacade.getInstance().allProtectors().map(p => {
+            return `${p.name}: Цена ${p.accept(cv)}, Урон: ${p.accept(dv)}`
+        }).join("\n");
     }
 }

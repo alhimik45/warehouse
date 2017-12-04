@@ -16,7 +16,7 @@ export class CostVisitor implements Visitor {
     }
 
     visitProtectorLimiter(element: IProtector): string {
-        return `${element.cost} (ограниенное использование)`;
+        return `${element.cost}`;
     }
 }
 
@@ -30,6 +30,6 @@ export class DamageVisitor implements Visitor {
     }
 
     visitProtectorLimiter(element: IProtector): string {
-        return `${element.damage} (ограниенное использование)`;
+        return `${element.damage} (ограниченное использование, ${element._limit} осталось)`;
     }
 }
