@@ -1,5 +1,5 @@
 export abstract class Subject {
-    private evs: { [string:string]: Observer };
+    protected evs: { [string:string]: Observer };
 
 
     constructor() {

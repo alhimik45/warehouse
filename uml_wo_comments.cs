@@ -27,6 +27,7 @@ class Warehouse {
   +getCorruptedCells():number
   +setCapacity(capacity:number):void
   +addCell(cell: Cell)
+  +clone();
 }
 
 class Cell {
@@ -259,6 +260,7 @@ class GameManager {
     -_protectorsModal:JQuery;
     -_messages:Array<string>;
     -_cellIdx:number = -1;
+    -mem:Memento;
 
     +constructor()
     -openScreen(screen:JQuery):void
@@ -298,6 +300,8 @@ class GameLogicFacade {
     +getInfo(): InformationTemplateData
     +getCells(): Array<Cell>
     +copyCell():void
+    +createMemento():Memento
+    +resetState(m:Memento)
     -allProtectors(): Array<IProtector>
 }
 
@@ -381,7 +385,7 @@ class CellBuilder {
 }
 
 abstract class Subject {
-    -evs: string => Observer
+    #evs: string => Observer
     +constructor()
     +attach(e: string, o: Observer)
     +detach(e: string, o: Observer)
@@ -408,7 +412,24 @@ abstract class OObserver {
     +constructor(message: action)
 }
 
+class Memento {
+    -_s: State;
 
+    +setState(s: State):Memento
+    +getState(): State
+}
+
+class State {
+    -days: number;
+    -money: number;
+    -warehouse: Warehouse;
+
+    constructor(days: number, money: number, warehouse: Warehouse)
+}
+
+GameLogicFacade o-- Memento
+Memento o-- State
+GameLogicFacade ..> State
 
 Observer <|-- WrapObserver
 Observer <|-- OObserver

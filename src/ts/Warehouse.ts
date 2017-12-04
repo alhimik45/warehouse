@@ -178,4 +178,12 @@ export class Warehouse extends Subject{
         }
         return corrupted;
     }
+
+    public clone():Warehouse {
+        let w = new Warehouse(this._resources, this._badFactors);
+        w._capacity = this._capacity;
+        w._cells = this._cells.map(c => c.clone());
+        w.evs = this.evs;
+        return w;
+    }
 }

@@ -9,7 +9,6 @@ export class TemplateFactory {
     private static dict: Map<string, Template> = new Map();
 
     public static getTemplate(name: string): Template {
-        debugger;
         if (TemplateFactory.dict.has(name)) {
             return TemplateFactory.dict.get(name);
         }

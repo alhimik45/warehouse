@@ -11,6 +11,7 @@ import {CellType} from "./CellType";
 import {selectIndexes} from "./util";
 import {BadFactorDescription} from "./BadFactorDescription";
 import {Observer, WrapObserver} from "./Subject";
+import {Memento, State} from "./Memento";
 
 export class GameLogicFacade {
     private static _instance: GameLogicFacade;
@@ -62,12 +63,12 @@ export class GameLogicFacade {
         this._warehouse = new Warehouse(this._resourceManager.resources,
             this._badFactorManager.badFactors);
 
-        this._warehouse.attach('cell-rent', new WrapObserver(this.onCellRent, (data :any)=> {
+        this._warehouse.attach('cell-rent', new WrapObserver(this.onCellRent, (data: any) => {
             this._money += data.rent;
         }));
         this._warehouse.attach('new-cell', this.onNewResource);
         this._warehouse.attach('bad-factor-spread', this.onBadFactorSpread);
-        this._warehouse.attach('cell-resource-destroyed', new WrapObserver(this.onCellResourceDestroyed, (data :any)=> {
+        this._warehouse.attach('cell-resource-destroyed', new WrapObserver(this.onCellResourceDestroyed, (data: any) => {
             //получаем штраф
             this._money -= data.penalty;
         }));
@@ -142,5 +143,17 @@ export class GameLogicFacade {
 
     public getBadBugs(): Array<BadFactorDescription> {
         return selectIndexes(this._badFactorManager.badFactors, [0, 1]);
+    }
+
+    public createMemento(): Memento {
+        let s = new State(this._days, this._money, this._warehouse);
+        return new Memento().setState(s);
+    }
+
+    public resetState(m: Memento) {
+        let s = m.getState();
+        this._days = s.days;
+        this._money = s.money;
+        this._warehouse = s.warehouse.clone();
     }
 }

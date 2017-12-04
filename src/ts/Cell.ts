@@ -73,7 +73,7 @@ export class Cell {
 
     //Устанавливает плохой фактор
     set badFactor(value: BadFactor) {
-        if (!this._resists.includes(value.description)) {
+        if (!value || !this._resists.includes(value.description)) {
             this._badFactor = value;
         }
     }

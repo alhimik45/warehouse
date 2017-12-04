@@ -1,8 +1,8 @@
-import {Cell} from "./Cell";
 import {GameLogicFacade} from "./GameLogicFacade";
 import {TemplateFactory} from "./TemplateFactory";
 import {CellType} from "./CellType";
 import {Observer} from "./Subject";
+import {Memento} from "./Memento";
 
 //Класс, отвечающий за игровой интерфейс
 export class GameManager {
@@ -22,6 +22,7 @@ export class GameManager {
     private _messages: Array<string>;
     //место, в котором использовать защитное средство
     private _cellIdx: number = -1;
+    private _mem: Memento;
 
     constructor() {
         this._startScreen = $('#start-screen');
@@ -97,6 +98,15 @@ export class GameManager {
             } else {
                 alert('Нехватает денег');
             }
+        });
+
+        $('#save').click(() => {
+            this._mem = GameLogicFacade.getInstance().createMemento();
+        });
+
+        $('#load').click(() => {
+            GameLogicFacade.getInstance().resetState(this._mem);
+            this.update();
         });
 
         let self = this;
@@ -199,7 +209,7 @@ export class GameManager {
 }
 
 
-abstract class OObserver extends Observer{
+abstract class OObserver extends Observer {
     protected message: any;
 
     constructor(message: any) {
@@ -208,7 +218,7 @@ abstract class OObserver extends Observer{
     }
 }
 
-class ResourceObserver extends OObserver{
+class ResourceObserver extends OObserver {
     update(data: any) {
         this.message(`<font color="#a52a2a">
             Товар на месте <b>№${data.i}</b> был уничтожен из-за <b>${data.cell.badFactor.description.name}</b>.<br/>
@@ -217,7 +227,7 @@ class ResourceObserver extends OObserver{
     }
 }
 
-class SpreadObserver extends OObserver{
+class SpreadObserver extends OObserver {
     update(data: any) {
         this.message(`<font color="#a52a2a">
             На месте <b>№${data.i}</b> появилось <b>${data.cell.badFactor.description.name}</b>
@@ -225,14 +235,14 @@ class SpreadObserver extends OObserver{
     }
 }
 
-class NewResourceObserver extends OObserver{
+class NewResourceObserver extends OObserver {
     update(data: any) {
         this.message(`Завезли новый товар <b>${data.cell.resource.description.name}</b>
             на срок <b>${data.cell.storeDays}дн.</b>`);
     }
 }
 
-class RentObserver extends OObserver{
+class RentObserver extends OObserver {
     update(data: any) {
         let cellQuality = Math.round(data.cell.resource.quality / data.cell.resource.description.quality * 100);
         this.message(`Вы получили <b>${data.rent}руб.</b> за хранение
