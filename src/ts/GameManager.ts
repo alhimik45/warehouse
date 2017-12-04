@@ -3,6 +3,7 @@ import {TemplateFactory} from "./TemplateFactory";
 import {CellType} from "./CellType";
 import {Observer} from "./Subject";
 import {Memento} from "./Memento";
+import {CostVisitor, DamageVisitor} from "./Visitor";
 
 //Класс, отвечающий за игровой интерфейс
 export class GameManager {
@@ -107,6 +108,14 @@ export class GameManager {
         $('#load').click(() => {
             GameLogicFacade.getInstance().resetState(this._mem);
             this.update();
+        });
+
+        $('#list').click(() => {
+            let cv = new CostVisitor();
+            let dv = new DamageVisitor();
+            alert(GameLogicFacade.getInstance().allProtectors().map(p =>{
+                return `${p.name}: Цена ${p.accept(cv)}, Урон: ${p.accept(dv)}`
+            }).join("\n"));
         });
 
         let self = this;

@@ -1,6 +1,7 @@
 import {BadFactorDescription} from "./BadFactorDescription";
 import {Cell} from "./Cell";
 import {IProtector} from "./IProtector";
+import {Visitor} from "./Visitor";
 
 //Декоратор, добавляющий защитному средству максимальное количество использований
 export class ProtectorLimiter implements IProtector {
@@ -41,5 +42,9 @@ export class ProtectorLimiter implements IProtector {
 
     get compareCriteria(): number {
         return this._originalProtector.compareCriteria;
+    }
+
+    accept(v: Visitor) {
+        return v.visitProtectorLimiter(this);
     }
 }

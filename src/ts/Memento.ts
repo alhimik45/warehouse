@@ -3,7 +3,7 @@ import {Warehouse} from "./Warehouse";
 export class Memento {
     private _s: State;
 
-    setState(s: State):Memento {
+    setState(s: State): Memento {
         this._s = s;
         return this;
     }

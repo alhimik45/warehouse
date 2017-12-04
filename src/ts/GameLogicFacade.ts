@@ -38,7 +38,7 @@ export class GameLogicFacade {
         this._protectorManager = new ProtectorManager(this._badFactorManager.badFactors);
     }
 
-    private allProtectors(): Array<IProtector> {
+    public allProtectors(): Array<IProtector> {
         return this._protectorManager.protectors.slice().concat(this._warehouse.cells.filter(c => c.resource).map(c => new ResourceProtectorAdapter(c.resource)));
     }
 

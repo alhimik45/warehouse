@@ -8,7 +8,7 @@ import {CellBuilder} from "./CellBuilder";
 import {Subject} from "./Subject";
 
 //Склад
-export class Warehouse extends Subject{
+export class Warehouse extends Subject {
     //Максимальное количество мест на складе
     private _capacity: number = 0;
     //Занятые места на складе
@@ -51,14 +51,14 @@ export class Warehouse extends Subject{
                     cell.badFactor.apply(cell);
                     if (cell.resource.quality <= 0) {
                         cellsToRemove.push(i);
-                        this.notify('cell-resource-destroyed', {cell: cell, penalty: this.cellPenalty(cell), i:i});
+                        this.notify('cell-resource-destroyed', {cell: cell, penalty: this.cellPenalty(cell), i: i});
                         continue;
                     }
                 }
                 cell.restStoreDays -= 1;
                 if (cell.restStoreDays <= 0) {
                     cellsToRemove.push(i);
-                    this.notify('cell-rent', {cell:cell, rent:this.cellRent(cell)});
+                    this.notify('cell-rent', {cell: cell, rent: this.cellRent(cell)});
                 }
             }
             ++i;
@@ -80,7 +80,7 @@ export class Warehouse extends Subject{
                         factor.canAffectTo(cell.resource) &&
                         Math.random() < 0.2) {
                         cell.badFactor = new BadFactor(factor);
-                        this.notify('bad-factor-spread', {cell:cell, i:i});
+                        this.notify('bad-factor-spread', {cell: cell, i: i});
                     }
                 }
             }
@@ -115,7 +115,7 @@ export class Warehouse extends Subject{
                     .setResists(this._cells[this.getEmptyIndex()].resists)
                     .build();
                 this._cells[this.getEmptyIndex()] = cell;
-                this.notify('new-cell', {cell:cell});
+                this.notify('new-cell', {cell: cell});
             }
         }
     }
@@ -179,7 +179,7 @@ export class Warehouse extends Subject{
         return corrupted;
     }
 
-    public clone():Warehouse {
+    public clone(): Warehouse {
         let w = new Warehouse(this._resources, this._badFactors);
         w._capacity = this._capacity;
         w._cells = this._cells.map(c => c.clone());

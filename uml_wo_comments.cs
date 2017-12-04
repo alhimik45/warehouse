@@ -100,6 +100,7 @@ interface IProtector {
     +int getDamage()
     +string getName()
     +BadFactorDescription[] getGoodAgainst()
+    +accept(v: Visitor)
 }
 
 class BadFactor  {
@@ -125,6 +126,7 @@ class ProtectorLimiter {
   +bool сanApply(Cell cell)
   +void apply(Cell cell)
   +getCompareCriteria(): number
+  +accept(v: Visitor)
 }
 
 class ResourceProtectorAdapter {
@@ -137,6 +139,7 @@ class ResourceProtectorAdapter {
   +bool сanApply(Cell cell)
   +void apply(Cell cell)
   +getCompareCriteria(): number
+  +accept(v: Visitor)
 }
 
 class Protector {
@@ -155,6 +158,7 @@ class Protector {
   +bool сanApply(Cell cell)
   +void apply(Cell cell)
   +getCompareCriteria(): number
+  +accept(v: Visitor)
 }
 
 interface IComparable {
@@ -427,9 +431,34 @@ class State {
     constructor(days: number, money: number, warehouse: Warehouse)
 }
 
+interface Visitor {
+    +visitProtector(element: IProtector): string;
+    +visitResourceProtector(element: IProtector): string;
+    +visitProtectorLimiter(element: IProtector): string;
+}
+
+class CostVisitor {
+    +visitProtector(element: IProtector): string;
+    +visitResourceProtector(element: IProtector): string;
+    +visitProtectorLimiter(element: IProtector): string;
+}
+
+class DamageVisitor {
+    +visitProtector(element: IProtector): string;
+    +visitResourceProtector(element: IProtector): string;
+    +visitProtectorLimiter(element: IProtector): string;
+}
+
+
 GameLogicFacade o-- Memento
 Memento o-- State
 GameLogicFacade ..> State
+
+CostVisitor --|> Visitor
+DamageVisitor --|> Visitor
+
+GameManager ..> CostVisitor
+GameManager ..> DamageVisitor
 
 Observer <|-- WrapObserver
 Observer <|-- OObserver

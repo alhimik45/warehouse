@@ -2,6 +2,7 @@ import {IProtector} from "./IProtector";
 import {BadFactorDescription} from "./BadFactorDescription";
 import {Cell} from "./Cell";
 import {Resource} from "./Resource";
+import {Visitor} from "./Visitor";
 
 
 export class ResourceProtectorAdapter implements IProtector {
@@ -42,5 +43,9 @@ export class ResourceProtectorAdapter implements IProtector {
 
     get compareCriteria(): number {
         return this.damage;
+    }
+
+    accept(v: Visitor) {
+        return v.visitResourceProtector(this);
     }
 }

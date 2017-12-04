@@ -1,6 +1,7 @@
 import {BadFactorDescription} from "./BadFactorDescription";
 import {Cell} from "./Cell";
 import {IProtector} from "./IProtector";
+import {Visitor} from "./Visitor";
 
 //Средство защиты от плохого фактора
 export class Protector implements IProtector {
@@ -59,5 +60,9 @@ export class Protector implements IProtector {
     //Возвращает критерий сравнения
     get compareCriteria(): number {
         return this.damage / this.cost;
+    }
+
+    accept(v: Visitor) {
+        return  v.visitProtector(this);
     }
 }
