@@ -440,21 +440,30 @@ class State {
 }
 
 interface Visitor {
-    +visitProtector(element: IProtector): string;
-    +visitResourceProtector(element: IProtector): string;
-    +visitProtectorLimiter(element: IProtector): string;
+    +visitProtector(element: Protector): string;
+    +visitResourceProtector(element: ResourceProtectorAdapter): string;
+    +visitProtectorLimiter(element: ProtectorLimiter): string;
+    +visitFullHpDestroyer(element: FullHpDestroyer): string;
+    +visitBrickSaver(element: BrickSaver): string;
+    +visitLowHper(element: LowHper): string;
 }
 
 class CostVisitor {
-    +visitProtector(element: IProtector): string;
-    +visitResourceProtector(element: IProtector): string;
-    +visitProtectorLimiter(element: IProtector): string;
+    +visitProtector(element: Protector): string;
+    +visitResourceProtector(element: ResourceProtectorAdapter): string;
+    +visitProtectorLimiter(element: ProtectorLimiter): string;
+    +visitFullHpDestroyer(element: FullHpDestroyer): string;
+    +visitBrickSaver(element: BrickSaver): string;
+    +visitLowHper(element: LowHper): string;
 }
 
 class DamageVisitor {
-    +visitProtector(element: IProtector): string;
-    +visitResourceProtector(element: IProtector): string;
-    +visitProtectorLimiter(element: IProtector): string;
+    +visitProtector(element: Protector): string;
+    +visitResourceProtector(element: ResourceProtectorAdapter): string;
+    +visitProtectorLimiter(element: ProtectorLimiter): string;
+    +visitFullHpDestroyer(element: FullHpDestroyer): string;
+    +visitBrickSaver(element: BrickSaver): string;
+    +visitLowHper(element: LowHper): string;
 }
 
 interface ICellSortStrategy {
@@ -470,6 +479,67 @@ class GoodFirstStrategy {
 class NoSortStrategy {
     +sort(cells: Array<Cell>): Array<Cell>;
 }
+
+
+
+
+
+
+
+ChainedProtector --|> IProtector
+
+abstract class ChainedProtector {
+    +_next: ChainedProtector;
+    +constructor(next: ChainedProtector)
+    +accept(v: Visitor): string;
+    +get compareCriteria()
+    +get cost()
+    +get damage()
+    +get name()
+    +chainedName();
+    +get goodAgainst();
+    +chainedCost();
+    +canApply(cell: Cell): boolean
+    +canApplyChainMember(cell: Cell): boolean;
+    +apply(cell: Cell): void;
+    +applyChainMember(cell: Cell): void;
+}
+
+FullHpDestroyer --|> ChainedProtector
+BrickSaver --|> ChainedProtector
+LowHper --|> ChainedProtector
+
+class FullHpDestroyer {
+    +accept(v: Visitor): string
+    +chainedName()
+    +chainedCost()
+    +canApplyChainMember(cell: Cell): boolean
+    +applyChainMember(cell: Cell): void
+}
+
+class BrickSaver  {
+        +accept(v: Visitor): string
+        +chainedName()
+        +chainedCost()
+        +canApplyChainMember(cell: Cell): boolean
+        +applyChainMember(cell: Cell): void
+}
+
+class LowHper {
+        +accept(v: Visitor): string
+        +chainedName()
+        +chainedCost()
+        +canApplyChainMember(cell: Cell): boolean
+        +applyChainMember(cell: Cell): void
+}
+
+
+
+
+
+
+
+
 
 DamagedFirstStrategy --|> ICellSortStrategy
 GoodFirstStrategy --|> ICellSortStrategy

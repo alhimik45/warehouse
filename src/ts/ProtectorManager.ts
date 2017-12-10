@@ -2,7 +2,7 @@ import {selectIndexes} from "./util";
 import {BadFactorDescription} from "./BadFactorDescription";
 import {UserValuesManager} from "./UserValuesManager";
 import {Protector} from "./Protector";
-import {IProtector} from "./IProtector";
+import {BrickSaver, FullHpDestroyer, IProtector, LowHper} from "./IProtector";
 import {ProtectorLimiter} from "./ProtectorLimiter";
 import {ProtectorBuilder} from "./ProtectorBuilder";
 
@@ -31,6 +31,10 @@ export class ProtectorManager extends UserValuesManager {
         this._entities.push(new Protector('Влагопоглотитель', 50, 40,
             selectIndexes(badFactors, [3])
         ));
+        this._entities.push(new FullHpDestroyer(new BrickSaver(null)));
+        this._entities.push(new FullHpDestroyer(new BrickSaver(new LowHper(null))));
+        this._entities.push(new BrickSaver(new LowHper(null)));
+        this._entities.push(new LowHper(new FullHpDestroyer(null)));
 
         this.renderList();
     }

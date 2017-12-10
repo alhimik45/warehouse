@@ -5,6 +5,9 @@ import {Visitor} from "./Visitor";
 
 //Декоратор, добавляющий защитному средству максимальное количество использований
 export class ProtectorLimiter implements IProtector {
+    get limit(): number {
+        return this._limit;
+    }
     private _originalProtector: IProtector;
     private _limit: number;
 
