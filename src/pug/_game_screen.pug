@@ -26,6 +26,12 @@ div.col-md-8
     p
     div#cells.scrollable-no
 div.col-md-4
+    input(type="radio", name="sort", style="float: left", data-s="dam")
+    p Зараженные клетки первыми
+    input(type="radio", name="sort", style="float: left", data-s="nd")
+    p Не зараженные занятые клетки первыми
+    input(type="radio", name="sort", style="float: left", data-s="nos", checked="checked")
+    p Не сортировать
     h4.text-center.
         Игровой лог
     div#messages.scrollable-no

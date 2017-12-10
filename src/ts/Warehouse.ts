@@ -17,6 +17,7 @@ export class Warehouse extends Subject {
     private _resources: Array<ResourceDescription>;
     //Список плохих факторов, которые могут возникнуть
     private _badFactors: Array<BadFactorDescription>;
+    private _sort: ICellSortStrategy;
 
 
     constructor(resources: Array<ResourceDescription>, badFactors: Array<BadFactorDescription>) {
@@ -26,6 +27,7 @@ export class Warehouse extends Subject {
         for (let i = 0; i < this._capacity; ++i) {
             this._cells.push(new CellBuilder().build());
         }
+        this._sort = new NoSortStrategy();
     }
 
     //Вычисляет арендную плату за хранение ресурса
@@ -67,6 +69,7 @@ export class Warehouse extends Subject {
             ResourcePool.getInstance().release(this._cells[idx].resource);
             this._cells[idx] = new CellBuilder().setResists(this._cells[idx].resists).build();
         }
+        this._cells = this._sort.sort(this._cells);
     }
 
     //распространение плохих факторов
@@ -184,6 +187,81 @@ export class Warehouse extends Subject {
         w._capacity = this._capacity;
         w._cells = this._cells.map(c => c.clone());
         w.evs = this.evs;
+        w._sort = this._sort;
         return w;
+    }
+
+    set sort(value: ICellSortStrategy) {
+        this._sort = value;
+        this._cells = value.sort(this._cells);
+    }
+}
+
+
+export interface ICellSortStrategy {
+    sort(cells: Array<Cell>): Array<Cell>;
+}
+
+export class DamagedFirstStrategy implements ICellSortStrategy{
+    sort(cells: Array<Cell>): Array<Cell> {
+        return cells.sort((a,b) => {
+            if(a.badFactor != null){
+                if(b.badFactor == null)
+                    return -1;
+                if(b.resource != null){
+                    if(a.resource != null)
+                        return a.restStoreDays - b.restStoreDays;
+                    return 1;
+                }
+                if(a.resource != null)
+                    return -1;
+                return 0;
+            }
+            if(b.badFactor != null)
+                return 1;
+            if(b.resource != null){
+                if(a.resource != null)
+                    return a.restStoreDays - b.restStoreDays;
+                return 1;
+            }
+            if(a.resource != null)
+                return -1;
+            return 0;
+        });
+    }
+}
+
+export class GoodFirstStrategy implements ICellSortStrategy{
+    sort(cells: Array<Cell>): Array<Cell> {
+        return cells.sort((a,b) => {
+            if(a.badFactor == null){
+                if(b.badFactor != null)
+                    return -1;
+                if(b.resource != null){
+                    if(a.resource != null)
+                        return 0;
+                    return 1;
+                }
+                if(a.resource != null)
+                    return -1;
+                return 0;
+            }
+            if(b.badFactor == null)
+                return 1;
+            if(b.resource != null){
+                if(a.resource != null)
+                    return 0;
+                return 1;
+            }
+            if(a.resource != null)
+                return -1;
+            return 0;
+        });
+    }
+}
+
+export class NoSortStrategy implements ICellSortStrategy{
+    sort(cells: Array<Cell>): Array<Cell> {
+        return cells;
     }
 }

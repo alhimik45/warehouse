@@ -1,4 +1,4 @@
-import {Warehouse} from "./Warehouse";
+import {DamagedFirstStrategy, GoodFirstStrategy, NoSortStrategy, Warehouse} from "./Warehouse";
 import {ProtectorManager} from "./ProtectorManager";
 import {BadFactorManager} from "./BadFactorManager";
 import {ResourceManager} from "./ResourceManager";
@@ -155,5 +155,19 @@ export class GameLogicFacade {
         this._days = s.days;
         this._money = s.money;
         this._warehouse = s.warehouse.clone();
+    }
+
+    public setSort(type: string) {
+        switch (type) {
+            case "dam":
+                this._warehouse.sort = new DamagedFirstStrategy;
+                break;
+            case "nd":
+                this._warehouse.sort = new GoodFirstStrategy;
+                break;
+            case "nos":
+                this._warehouse.sort = new NoSortStrategy;
+                break;
+        }
     }
 }

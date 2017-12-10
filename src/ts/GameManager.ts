@@ -86,6 +86,12 @@ export class GameManager {
             }
         });
 
+        $('input[name=sort]').change(() => {
+            let d = $('input[name=sort]:checked').data('s');
+            GameLogicFacade.getInstance().setSort(d);
+            this.update();
+        });
+
         $('#increase-capacity-fire').click(() => {
             if (GameLogicFacade.getInstance().increaseWarehouseCapacity(CellType.Antifire)) {
                 this.update();

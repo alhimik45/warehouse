@@ -12,6 +12,7 @@ class Warehouse {
   -ResourceDescription[] resources
 
   -BadFactorDescription[] badFactors
+  -_sort: ICellSortStrategy
 
   -cellRent(cell:Cell)
   -cellPenalty(cell:Cell)
@@ -28,6 +29,7 @@ class Warehouse {
   +setCapacity(capacity:number):void
   +addCell(cell: Cell)
   +clone();
+  +setSort(sort: ICellSortStrategy)
 }
 
 class Cell {
@@ -311,6 +313,7 @@ class GameLogicFacade {
     +copyCell():void
     +createMemento():Memento
     +resetState(m:Memento)
+    +setSort(type: string)
     -allProtectors(): Array<IProtector>
 }
 
@@ -454,6 +457,29 @@ class DamageVisitor {
     +visitProtectorLimiter(element: IProtector): string;
 }
 
+interface ICellSortStrategy {
+    +sort(cells: Array<Cell>): Array<Cell>;
+}
+
+class DamagedFirstStrategy {
+    +sort(cells: Array<Cell>): Array<Cell>;
+}
+class GoodFirstStrategy {
+    +sort(cells: Array<Cell>): Array<Cell>;
+}
+class NoSortStrategy {
+    +sort(cells: Array<Cell>): Array<Cell>;
+}
+
+DamagedFirstStrategy --|> ICellSortStrategy
+GoodFirstStrategy --|> ICellSortStrategy
+NoSortStrategy --|> ICellSortStrategy
+
+DamagedFirstStrategy <.. GameLogicFacade
+GoodFirstStrategy <.. GameLogicFacade
+NoSortStrategy <.. GameLogicFacade
+
+Warehouse o-- ICellSortStrategy
 
 GameManager *-- ProtectorLister
 ProtectorLister ..> GameLogicFacade
