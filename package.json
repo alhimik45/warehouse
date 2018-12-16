@@ -3,14 +3,14 @@
   "version": "0.0.1",
   "dependencies": {
     "asEvented": "^0.4.3",
-    "typescript": "^2.5.3"
+    "typescript": "^2.9.2"
   },
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-browserify": "^0.5.1",
-    "gulp-intermediate": "^3.0.1",
+    "gulp": "^4.0.0",
+    "gulp-bro": "^1.0.3",
+    "gulp-intermediate": "^4.0.0",
     "gulp-pug": "^3.0.3",
-    "gulp-sass": "^2.3.1",
-    "gulp-typescript": "^3.2.2"
+    "gulp-sass": "^4.0.2",
+    "gulp-typescript": "^3.2.4"
   }
 }

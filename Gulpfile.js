@@ -2,7 +2,7 @@ var gulp = require("gulp");
 var pug = require('gulp-pug');
 var sass = require('gulp-sass');
 var ts = require('gulp-typescript');
-var browserify = require('gulp-browserify');
+var browserify = require('gulp-bro');
 var intermediate = require('gulp-intermediate');
 
 var ts_path = 'src/ts/**/*.ts';
@@ -53,7 +53,7 @@ gulp.task('typescript', function () {
 
 
 gulp.task("watch", function () {
-    gulp.watch(scss_path, ['scss']);
-    gulp.watch(ts_path, ['typescript']);
-    gulp.watch(pug_path_watch, ['pug']);
+    gulp.watch(scss_path, gulp.parallel('scss'));
+    gulp.watch(ts_path, gulp.parallel('typescript'));
+    gulp.watch(pug_path_watch, gulp.parallel('pug'));
 });
